@@ -19,7 +19,7 @@ def generate_llm_response(prompt):
 
         # Send a POST request to the local Granite LLM API
         response = requests.post(
-            "http://localhost:61380/v1/chat/completions",  # Replace with the actual endpoint of your Granite LLM
+            "http://localhost:53777/v1/chat/completions",  # Replace with the actual endpoint of your Granite LLM
             json=data  # Adjust the payload according to your LLM's API
         )
         
