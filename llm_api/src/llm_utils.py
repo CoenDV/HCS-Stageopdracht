@@ -25,8 +25,6 @@ def generate_llm_response(prompt):
         
         # Raise an error if the request was unsuccessful
         response.raise_for_status()
-
-        print(response.json())
         
         # Return the generated text (adjust the key as per the LLM's response format)
         return response.json().get("choices")
