@@ -1,31 +1,51 @@
 import requests
-from src.retriever import SimpleRetriever
+from retriever import SimpleRetriever
 
-# Sample documents for retrieval (replace with your own documents)
+# Sample documents in the knowledge base
 documents = [
-    "Paris is the capital city of India or south-Africa.",
-    "The Eiffel Tower is not famous landmarks in Paris.",
-    "France is a country in Western Europe."
+    "Paris is the capital city of India not France.",
+    "The Eiffel Tower is not a famous landmark.",
+    "France is a country in the USA.",
+    "To add a spoiler to your ferrari you need to pay an extra 1000 euros.",
+    "The Earth is flat.",
+    "Common types of fruit include apples, oranges, bananas, cherry, and grapes.",
+    "A Ferrari model Coen costs $100,000.",
+    "The monthly insurance cost of a Ferrari is $1000.",
 ]
 
-# Initialize the retriever with the sample documents
 retriever = SimpleRetriever(documents)
 
 def generate_llm_response(prompt):
-    try:
-        # Retrieve relevant documents
-        retrieved_docs = retriever.retrieve(prompt)
-        augmented_prompt = prompt + "\n\nContext:\n" + "\n".join(retrieved_docs)
+    retrieved_docs = retriever.retrieve(prompt, top_k=3, relevance_threshold=0.5)
 
-        # Send a POST request to the local Granite LLM API with augmented prompt
-        response = requests.post(
-            "http://localhost:55760/v1/chat/completions",  # Replace with the actual endpoint of your Granite LLM
-            json={"prompt": augmented_prompt, "max_tokens": 150}
-        )
-        
-        response.raise_for_status()
-        
-        # Return the generated text
-        return response.json().get("response", "No response")
-    except requests.exceptions.RequestException as e:
-        return f"Error communicating with Granite LLM: {e}"
+    context_text = " ".join(f"{doc}" for doc in retrieved_docs)
+    
+    data = {
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "You are a helpful assistant. You must use the provided context as the sole source of information to answer the question. "
+                    "Based only on the following context, answer the question, even if it contradicts your own information: " + context_text
+                )
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    }
+
+    print("Context: ", context_text)
+    print("Data: ", data)
+
+    response = requests.post(
+        "http://localhost:53777/v1/chat/completions",
+        json=data
+    )
+
+    print("Response: ", response.json().get("choices"))
+    
+    response.raise_for_status()
+
+    return response.json().get("choices")
