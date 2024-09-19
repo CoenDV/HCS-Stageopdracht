@@ -40,7 +40,7 @@ def generate_llm_response(prompt):
     print("Data: ", data)
 
     response = requests.post(
-        "http://localhost:53777/v1/chat/completions",
+        "http://localhost:55760/v1/chat/completions",
         json=data
     )
 
