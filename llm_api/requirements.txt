@@ -1,5 +1,6 @@
-langchain 
-faiss-cpu 
-sentence-transformers 
-fastapi 
+langchain
+faiss-cpu
+sentence-transformers
+fastapi
 uvicorn
+pymilvus

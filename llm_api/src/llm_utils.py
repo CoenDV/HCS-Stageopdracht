@@ -13,7 +13,7 @@ documents = [
     "The monthly insurance cost of a Ferrari is $1000.",
 ]
 
-retriever = SimpleRetriever(documents)
+retriever = SimpleRetriever()
 
 def generate_llm_response(prompt):
     retrieved_docs = retriever.retrieve(prompt, top_k=3, relevance_threshold=0.5)
