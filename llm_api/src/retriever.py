@@ -8,24 +8,21 @@ class SimpleRetriever:
 
 
     def retrieve(self, query, top_k=6, relevance_threshold=0.5):
-        # Embed the query
         query_embedding = self.model.encode([query])
 
-        # Define the search parameters
         search_params = {
-            "metric_type": "L2",
+            "metric_type": "IP", # Inner Product, a way of measuring similarity
             "params": {
-                "radius": relevance_threshold,
+                "radius": relevance_threshold # Only return documents relevant to the query
             }
         }
 
-        # Search the collection
-        res = self.milvus_client.search(
-            collection_name="demo_collection",
+        result = self.milvus_client.search(
+            collection_name="demo_collection", 
             data=query_embedding,
-            params=search_params,
             limit=top_k,
-            output_fields=["text", "subject"]
+            search_params=search_params,
+            output_fields=["text"]
         )
 
-        return res
+        return result

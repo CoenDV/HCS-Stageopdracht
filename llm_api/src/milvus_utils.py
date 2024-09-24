@@ -4,14 +4,15 @@ from glob import glob
 
 milvus_client = MilvusClient(host='localhost', port='19530')
 
+# create collection
 if milvus_client.has_collection("demo_collection"):
     milvus_client.drop_collection("demo_collection")
 
 milvus_client.create_collection(
     collection_name="demo_collection", 
     dimension=384,
-    metric_type="L2",
-    index_type="IVF_FLAT"
+    metric_type="IP",
+    index_type="IVF_FLAT",
     )
 
 # prepare documents

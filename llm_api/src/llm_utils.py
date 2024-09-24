@@ -1,25 +1,16 @@
 import requests
 from retriever import SimpleRetriever
-
-# Sample documents in the knowledge base
-documents = [
-    "Paris is the capital city of India not France.",
-    "The Eiffel Tower is not a famous landmark.",
-    "France is a country in the USA.",
-    "To add a spoiler to your ferrari you need to pay an extra 1000 euros.",
-    "The Earth is flat.",
-    "Common types of fruit include apples, oranges, bananas, cherry, and grapes.",
-    "A Ferrari model Coen costs $100,000.",
-    "The monthly insurance cost of a Ferrari is $1000.",
-]
+import json
 
 retriever = SimpleRetriever()
 
 def generate_llm_response(prompt):
     retrieved_docs = retriever.retrieve(prompt, top_k=3, relevance_threshold=0.5)
 
+    # Concatenate the retrieved documents into a single string
     context_text = " ".join(f"{doc}" for doc in retrieved_docs)
     
+    # Build the data payload
     data = {
         "messages": [
             {
@@ -37,14 +28,14 @@ def generate_llm_response(prompt):
         "max_tokens": 100,
     }
 
-    print("Data: ", data)
+    print("Data: ", json.dumps(data, indent=4))
 
     response = requests.post(
         "http://localhost:55760/v1/chat/completions",
         json=data
     )
 
-    print("Response: ", response.json().get("choices"))
+    print("Response: ", json.dumps(response.json().get("choices"), indent=4))
     
     response.raise_for_status()
 
