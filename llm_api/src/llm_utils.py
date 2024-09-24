@@ -33,10 +33,10 @@ def generate_llm_response(prompt):
                 "role": "user",
                 "content": prompt
             }
-        ]
+        ],
+        "max_tokens": 100,
     }
 
-    print("Context: ", context_text)
     print("Data: ", data)
 
     response = requests.post(

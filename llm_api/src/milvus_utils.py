@@ -1,4 +1,4 @@
-from pymilvus import MilvusClient, Collection
+from pymilvus import MilvusClient, Collection, connections
 from sentence_transformers import SentenceTransformer
 from glob import glob
 
@@ -7,7 +7,12 @@ milvus_client = MilvusClient(host='localhost', port='19530')
 if milvus_client.has_collection("demo_collection"):
     milvus_client.drop_collection("demo_collection")
 
-milvus_client.create_collection(collection_name="demo_collection", dimension=384)
+milvus_client.create_collection(
+    collection_name="demo_collection", 
+    dimension=384,
+    metric_type="L2",
+    index_type="IVF_FLAT"
+    )
 
 # prepare documents
 print("Preparing documents...")
@@ -22,15 +27,12 @@ for file_path in glob("./../vectordb/documents/*.txt", recursive=True):
         vectors.append(model.encode(file_text))
 
 data = [
-    {"id": i, "vector": vectors[i], "text": docs[i], "subject": "history"}
+    {"id": i, "vector": vectors[i], "text": docs[i], "subject": "insurance"}
     for i in range(len(vectors))
 ]
 
 # insert data
 print("Inserting data...")
-milvus_client.insert(collection_name="demo_collection", data=data)
-
-print("printing complete collection...")
-collection = Collection("demo_collection")
-result = collection.query(expr="id >= 0")
-print(result)
+res = milvus_client.insert(collection_name="demo_collection", data=data)
+print(milvus_client.describe_collection("demo_collection"))
+print(res)

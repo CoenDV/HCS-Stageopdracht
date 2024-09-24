@@ -1,0 +1,8 @@
+5. Usage-Based Insurance (UBI)
+Description: Usage-Based Insurance is a modern approach that tailors your premiums based on your driving habits and mileage. It rewards safe driving behaviors with lower rates.
+
+Monitoring: A telematics device is installed in your vehicle to track various driving metrics, including speed, braking patterns, and the distance driven.
+
+Discounts: Drivers who demonstrate safe driving habits can earn significant discounts, making this a cost-effective option for responsible drivers.
+
+Premium: Variable, as premiums are adjusted based on driving behavior. Ideal for low-mileage drivers who exhibit safe driving practices.

@@ -7,19 +7,15 @@ class SimpleRetriever:
         self.milvus_client = MilvusClient(host='localhost', port='19530')
 
 
-    def retrieve(self, query, top_k=3, relevance_threshold=0.5):
+    def retrieve(self, query, top_k=6, relevance_threshold=0.5):
         # Embed the query
         query_embedding = self.model.encode([query])
 
-        # Filter results based on distance
-        param = {
-            # use `L2` as the metric to calculate the distance
+        # Define the search parameters
+        search_params = {
             "metric_type": "L2",
             "params": {
-                # search for vectors with a distance smaller than 1.0
-                "radius": 1.0,
-                # filter out vectors with a distance smaller than or equal to the relevance_threshold
-                "range_filter" : relevance_threshold
+                "radius": relevance_threshold,
             }
         }
 
@@ -27,7 +23,7 @@ class SimpleRetriever:
         res = self.milvus_client.search(
             collection_name="demo_collection",
             data=query_embedding,
-            params=param,
+            params=search_params,
             limit=top_k,
             output_fields=["text", "subject"]
         )
