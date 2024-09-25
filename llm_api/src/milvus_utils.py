@@ -2,7 +2,9 @@ from pymilvus import MilvusClient, Collection, connections
 from sentence_transformers import SentenceTransformer
 from glob import glob
 
-milvus_client = MilvusClient(host='localhost', port='19530')
+connections.connect('http://milvus-standalone-route-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com')
+
+milvus_client = MilvusClient('milvus-standalone-route-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com')
 
 # create collection
 if milvus_client.has_collection("demo_collection"):
