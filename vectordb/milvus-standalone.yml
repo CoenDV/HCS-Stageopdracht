@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: milvus-standalone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: milvus-standalone
+  template:
+    metadata:
+      labels:
+        app: milvus-standalone
+    spec:
+      containers:
+      - name: milvus-standalone
+        image: milvusdb/milvus:v2.4.11
+        command: ["milvus", "run", "standalone"]
+        env:
+        - name: ETCD_ENDPOINTS
+          value: "etcd:2379"
+        - name: MINIO_ADDRESS
+          value: "minio:9000"
+        volumeMounts:
+        - mountPath: /var/lib/milvus
+          name: milvus-storage
+      volumes:
+      - name: milvus-storage
+        persistentVolumeClaim:
+          claimName: milvus-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: milvus-standalone
+spec:
+  ports:
+  - port: 19530
+    targetPort: 19530
+    name: milvus-port
+  - port: 9091
+    targetPort: 9091
+    name: milvus-health
+  selector:
+    app: milvus-standalone

@@ -3,4 +3,4 @@ faiss-cpu
 sentence-transformers
 fastapi
 uvicorn
-pymilvus
+pymilvus==2.4.6

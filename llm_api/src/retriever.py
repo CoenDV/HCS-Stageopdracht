@@ -4,7 +4,10 @@ from pymilvus import MilvusClient
 class SimpleRetriever:
     def __init__(self):
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
-        self.milvus_client = MilvusClient(host='https://milvus-minio-pod-19530-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com', port='19530')
+        self.milvus_client = MilvusClient(
+            host="http://milvus-standalone-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com",
+            port="19530",
+        )
 
     def retrieve(self, query, top_k=6, relevance_threshold=0.5):
         query_embedding = self.model.encode([query])
