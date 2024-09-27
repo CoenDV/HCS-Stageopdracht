@@ -1,0 +1,70 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  # generateName: milvus-api
+  annotations:
+    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.35.242/23"],"mac_address":"0a:58:0a:80:23:f2","gateway_ips":["10.128.34.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.34.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.34.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.34.1"}],"ip_address":"10.128.35.242/23","gateway_ip":"10.128.34.1"}}'
+    kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for container milfus; cpu, memory limit for container milfus'
+  name: milvus-api
+  labels:
+    app: milvus-api
+spec:
+  restartPolicy: Always
+  serviceAccountName: default
+  securityContext:
+    seLinuxOptions:
+      level: 's0:c114,c14'
+    fsGroup: 1012910000  # Allows writing to the mounted volume
+  containers:
+    - name: milvus-api
+      image: 'image-registry.openshift-image-registry.svc:5000/coen-de-vries-dev/milfus@sha256:bedebb507bfc5deb811affb4d373ede35746681c008cd875c0997f1f52d5b658'
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      securityContext:
+        runAsUser: 1012910000
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+      env:
+        - name: TRANSFORMERS_CACHE  # Set cache directory to the mounted volume
+          value: "/app/transformers_cache"
+      volumeMounts:
+        - name: cache-volume  # Mount a volume for writable cache
+          mountPath: /app/transformers_cache
+      resources:
+        limits:
+          cpu: '1'
+          memory: 1000Mi
+        requests:
+          cpu: 10m
+          memory: 64Mi
+  volumes:
+    - name: cache-volume  # Define the volume for cache
+      emptyDir: {}  # Use an emptyDir volume which is writable
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: milfus-service  # Define a service to expose your pod
+spec:
+  selector:
+    app: milfus
+  ports:
+    - protocol: TCP
+      port: 8080  # Expose the container port
+      targetPort: 8080
+  type: ClusterIP
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: milfus-route  # Define a route to expose the service
+spec:
+  to:
+    kind: Service
+    name: milfus-service
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge  # Use edge termination for HTTPS
+  wildcardPolicy: None
