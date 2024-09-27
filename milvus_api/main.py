@@ -1,4 +1,5 @@
 from pymilvus import MilvusClient
+from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 from glob import glob
 from fastapi import FastAPI
@@ -14,20 +15,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.milvus_client = MilvusClient(
-    uri='http://172.30.100.242',
-    port='19530'
-)
-
-app.sentence_model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
-
 @app.post("/prepare/")
 async def generate_text():
-    # create collection
-    if app.milvus_client.has_collection("demo_collection"):
-        app.milvus_client.drop_collection("demo_collection")
+    model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
+    milvus_client = MilvusClient(
+        host="localhost", # Change this to the IP address of your Milvus server
+        port="19530",
+    )
 
-    app.milvus_client.create_collection(
+    # create collection
+    if milvus_client.has_collection("demo_collection"):
+        milvus_client.drop_collection("demo_collection")
+
+    milvus_client.create_collection(
         collection_name="demo_collection", 
         dimension=384,
         metric_type="IP",
@@ -43,7 +43,7 @@ async def generate_text():
         with open(file_path, "r") as file:
             file_text = file.read()
             docs.append(file_text)
-            vectors.append(app.model.encode(file_text))
+            vectors.append(model.encode(file_text))
 
     data = [
         {"id": i, "vector": vectors[i], "text": docs[i], "subject": "insurance"}
@@ -52,27 +52,38 @@ async def generate_text():
 
     # insert data
     print("Inserting data...")
-    res = app.milvus_client.insert(collection_name="demo_collection", data=data)
-    print(app.milvus_client.describe_collection("demo_collection"))
+    res = milvus_client.insert(collection_name="demo_collection", data=data)
+    print(milvus_client.describe_collection("demo_collection"))
     print(res)
 
     return {"response": "Data prepared successfully"}
 
+class SearchRequest(BaseModel):
+    query: str
+    top_k: int = 6
+    relevance_threshold: float = 0.5
+
 @app.post("/search/")
-async def search_text(query, top_k=6, relevance_threshold=0.5):
-    query_embedding = app.sentence_model.encode([query])
+async def search_text(request: SearchRequest):
+    model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
+    milvus_client = MilvusClient(
+        host="localhost", # Change this to the IP address of your Milvus server
+        port="19530",
+    )
+
+    query_embedding = model.encode([request.query])
 
     search_params = {
         "metric_type": "IP", # Inner Product, a way of measuring similarity
         "params": {
-            "radius": relevance_threshold # Only return documents relevant to the query
+            "radius": request.relevance_threshold # Only return documents relevant to the query
         }
     }
 
-    result = app.milvus_client.search(
+    result = milvus_client.search(
         collection_name="demo_collection", 
         data=query_embedding,
-        limit=top_k,
+        limit=request.top_k,
         search_params=search_params,
         output_fields=["text"]
     )
