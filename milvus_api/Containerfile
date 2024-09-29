@@ -13,6 +13,9 @@ COPY requirements.txt .
 # Install the required Python packages
 RUN pip install -r requirements.txt
 
+RUN mkdir -p /app/.cache && \
+    chown -R 1000:1000 /app/.cache
+
 # Copy the entire FastAPI application into the container
 COPY . .
 
