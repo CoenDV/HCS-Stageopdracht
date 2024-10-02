@@ -9,8 +9,13 @@ def generate_llm_response(prompt):
         json={"query": prompt}
     )
 
+    print(retrieved_docs.json())
+
     # Concatenate the retrieved documents into a single string
-    context_text = "".join(f"{doc}" for doc in retrieved_docs.json()[0][0]['entity']['text'])
+    if retrieved_docs.json() == [[]]:
+        context_text = "No relevant documents found."
+    else:
+        context_text = "".join(f"{doc}" for doc in retrieved_docs.json()[0][0]['entity']['text'])
 
     # Build the data payload
     data = {
