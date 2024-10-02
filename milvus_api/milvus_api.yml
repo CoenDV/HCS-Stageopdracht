@@ -1,70 +1,269 @@
 kind: Pod
 apiVersion: v1
 metadata:
-  # generateName: milvus-api
+  generateName: milvus-api-v4-5bd565fb78-
   annotations:
-    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.35.242/23"],"mac_address":"0a:58:0a:80:23:f2","gateway_ips":["10.128.34.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.34.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.34.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.34.1"}],"ip_address":"10.128.35.242/23","gateway_ip":"10.128.34.1"}}'
-    kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for container milfus; cpu, memory limit for container milfus'
-  name: milvus-api
+    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.117.209/23"],"mac_address":"0a:58:0a:80:75:d1","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.117.209/23","gateway_ip":"10.128.116.1"}}'
+    k8s.v1.cni.cncf.io/network-status: |-
+      [{
+          "name": "ovn-kubernetes",
+          "interface": "eth0",
+          "ips": [
+              "10.128.117.209"
+          ],
+          "mac": "0a:58:0a:80:75:d1",
+          "default": true,
+          "dns": {}
+      }]
+    kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for container milvus-api-v4; cpu, memory limit for container milvus-api-v4'
+    openshift.io/generated-by: OpenShiftWebConsole
+    openshift.io/scc: restricted-v2
+    seccomp.security.alpha.kubernetes.io/pod: runtime/default
+  resourceVersion: '2514557086'
+  name: milvus-api-v4-5bd565fb78-w89bg
+  uid: 90a4b77c-bc3a-4e08-9877-e39b79797288
+  creationTimestamp: '2024-10-02T06:10:47Z'
+  managedFields:
+    - manager: ip-10-0-196-170
+      operation: Update
+      apiVersion: v1
+      time: '2024-10-02T06:10:47Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:k8s.ovn.org/pod-networks': {}
+      subresource: status
+    - manager: kube-controller-manager
+      operation: Update
+      apiVersion: v1
+      time: '2024-10-02T06:10:47Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:openshift.io/generated-by': {}
+          'f:generateName': {}
+          'f:labels':
+            .: {}
+            'f:app': {}
+            'f:deployment': {}
+            'f:pod-template-hash': {}
+          'f:ownerReferences':
+            .: {}
+            'k:{"uid":"1ef7b06f-e75a-41a4-83d7-a9a972a7aa02"}': {}
+        'f:spec':
+          'f:containers':
+            'k:{"name":"milvus-api-v4"}':
+              .: {}
+              'f:image': {}
+              'f:imagePullPolicy': {}
+              'f:name': {}
+              'f:ports':
+                .: {}
+                'k:{"containerPort":8080,"protocol":"TCP"}':
+                  .: {}
+                  'f:containerPort': {}
+                  'f:protocol': {}
+              'f:resources': {}
+              'f:terminationMessagePath': {}
+              'f:terminationMessagePolicy': {}
+          'f:dnsPolicy': {}
+          'f:enableServiceLinks': {}
+          'f:restartPolicy': {}
+          'f:schedulerName': {}
+          'f:securityContext': {}
+          'f:terminationGracePeriodSeconds': {}
+    - manager: multus-daemon
+      operation: Update
+      apiVersion: v1
+      time: '2024-10-02T06:10:47Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:k8s.v1.cni.cncf.io/network-status': {}
+      subresource: status
+    - manager: kubelet
+      operation: Update
+      apiVersion: v1
+      time: '2024-10-02T06:14:30Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:conditions':
+            'k:{"type":"ContainersReady"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Initialized"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"PodReadyToStartContainers"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Ready"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+          'f:containerStatuses': {}
+          'f:hostIP': {}
+          'f:hostIPs': {}
+          'f:phase': {}
+          'f:podIP': {}
+          'f:podIPs':
+            .: {}
+            'k:{"ip":"10.128.117.209"}':
+              .: {}
+              'f:ip': {}
+          'f:startTime': {}
+      subresource: status
+  namespace: coen-de-vries-dev
+  ownerReferences:
+    - apiVersion: apps/v1
+      kind: ReplicaSet
+      name: milvus-api-v4-5bd565fb78
+      uid: 1ef7b06f-e75a-41a4-83d7-a9a972a7aa02
+      controller: true
+      blockOwnerDeletion: true
   labels:
-    app: milvus-api
+    app: milvus-api-v4
+    deployment: milvus-api-v4
+    pod-template-hash: 5bd565fb78
 spec:
   restartPolicy: Always
   serviceAccountName: default
+  imagePullSecrets:
+    - name: default-dockercfg-cxxht
+  priority: -3
+  schedulerName: default-scheduler
+  enableServiceLinks: true
+  terminationGracePeriodSeconds: 30
+  preemptionPolicy: PreemptLowerPriority
+  nodeName: ip-10-0-196-170.ec2.internal
   securityContext:
     seLinuxOptions:
       level: 's0:c114,c14'
-    fsGroup: 1012910000  # Allows writing to the mounted volume
+    fsGroup: 1012910000
+    seccompProfile:
+      type: RuntimeDefault
   containers:
-    - name: milvus-api
-      image: 'image-registry.openshift-image-registry.svc:5000/coen-de-vries-dev/milfus@sha256:bedebb507bfc5deb811affb4d373ede35746681c008cd875c0997f1f52d5b658'
-      ports:
-        - containerPort: 8080
-          protocol: TCP
-      securityContext:
-        runAsUser: 1012910000
-        runAsNonRoot: true
-        allowPrivilegeEscalation: false
-      env:
-        - name: TRANSFORMERS_CACHE  # Set cache directory to the mounted volume
-          value: "/app/transformers_cache"
-      volumeMounts:
-        - name: cache-volume  # Mount a volume for writable cache
-          mountPath: /app/transformers_cache
-      resources:
+    - resources:
         limits:
           cpu: '1'
           memory: 1000Mi
         requests:
           cpu: 10m
           memory: 64Mi
+      terminationMessagePath: /dev/termination-log
+      name: milvus-api-v4
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+        runAsUser: 1012910000
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: kube-api-access-vxvz5
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      terminationMessagePolicy: File
+      image: 'image-registry.openshift-image-registry.svc:5000/coen-de-vries-dev/milvus-api-v4@sha256:a2f26cb0a2ba74efe5d47a39a452ca12cd7f8fe82518249db7145db8b39a1742'
+  serviceAccount: default
   volumes:
-    - name: cache-volume  # Define the volume for cache
-      emptyDir: {}  # Use an emptyDir volume which is writable
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: milfus-service  # Define a service to expose your pod
-spec:
-  selector:
-    app: milfus
-  ports:
-    - protocol: TCP
-      port: 8080  # Expose the container port
-      targetPort: 8080
-  type: ClusterIP
----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: milfus-route  # Define a route to expose the service
-spec:
-  to:
-    kind: Service
-    name: milfus-service
-  port:
-    targetPort: 8080
-  tls:
-    termination: edge  # Use edge termination for HTTPS
-  wildcardPolicy: None
+    - name: kube-api-access-vxvz5
+      projected:
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              name: kube-root-ca.crt
+              items:
+                - key: ca.crt
+                  path: ca.crt
+          - downwardAPI:
+              items:
+                - path: namespace
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+          - configMap:
+              name: openshift-service-ca.crt
+              items:
+                - key: service-ca.crt
+                  path: service-ca.crt
+        defaultMode: 420
+  dnsPolicy: ClusterFirst
+  tolerations:
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+    - key: node.kubernetes.io/memory-pressure
+      operator: Exists
+      effect: NoSchedule
+  priorityClassName: sandbox-users-pods
+status:
+  containerStatuses:
+    - restartCount: 0
+      started: true
+      ready: true
+      name: milvus-api-v4
+      state:
+        running:
+          startedAt: '2024-10-02T06:14:29Z'
+      imageID: 'image-registry.openshift-image-registry.svc:5000/coen-de-vries-dev/milvus-api-v4@sha256:a2f26cb0a2ba74efe5d47a39a452ca12cd7f8fe82518249db7145db8b39a1742'
+      image: 'image-registry.openshift-image-registry.svc:5000/coen-de-vries-dev/milvus-api-v4@sha256:a2f26cb0a2ba74efe5d47a39a452ca12cd7f8fe82518249db7145db8b39a1742'
+      lastState: {}
+      containerID: 'cri-o://7cc8f77e0fc569ae21bd5163f87945c3b1e9de7e67610cf51fb4d994275c7aba'
+  qosClass: Burstable
+  hostIPs:
+    - ip: 10.0.196.170
+  podIPs:
+    - ip: 10.128.117.209
+  podIP: 10.128.117.209
+  hostIP: 10.0.196.170
+  startTime: '2024-10-02T06:10:47Z'
+  conditions:
+    - type: PodReadyToStartContainers
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-10-02T06:14:30Z'
+    - type: Initialized
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-10-02T06:10:47Z'
+    - type: Ready
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-10-02T06:14:30Z'
+    - type: ContainersReady
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-10-02T06:14:30Z'
+    - type: PodScheduled
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-10-02T06:10:47Z'
+  phase: Running

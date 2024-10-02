@@ -19,7 +19,7 @@ app.add_middleware(
 async def generate_text():
     model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
     milvus_client = MilvusClient(
-        host="localhost", # Change this to the IP address of your Milvus server
+        uri="http://172.30.24.69", # Change this to the IP address of your Milvus server
         port="19530",
     )
 
@@ -39,7 +39,7 @@ async def generate_text():
     docs = []
     vectors = []
 
-    for file_path in glob("./../vectordb/documents/*.txt", recursive=True):
+    for file_path in glob("./documents/*.txt", recursive=True):
         with open(file_path, "r") as file:
             file_text = file.read()
             docs.append(file_text)
@@ -67,7 +67,7 @@ class SearchRequest(BaseModel):
 async def search_text(request: SearchRequest):
     model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
     milvus_client = MilvusClient(
-        host="localhost", # Change this to the IP address of your Milvus server
+        uri="http://172.30.24.69", # Change this to the IP address of your Milvus server
         port="19530",
     )
 
