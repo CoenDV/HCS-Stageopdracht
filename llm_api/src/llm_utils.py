@@ -1,15 +1,17 @@
 import requests
-from retriever import SimpleRetriever
 import json
 
-retriever = SimpleRetriever()
-
 def generate_llm_response(prompt):
-    retrieved_docs = retriever.retrieve(prompt, top_k=3, relevance_threshold=0.5)
+
+    # Retrieve the documents relevant to the prompt
+    retrieved_docs = requests.post(
+        "https://milvus-api-v4-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
+        json={"query": prompt}
+    )
 
     # Concatenate the retrieved documents into a single string
-    context_text = " ".join(f"{doc}" for doc in retrieved_docs)
-    
+    context_text = "".join(f"{doc}" for doc in retrieved_docs.json()[0][0]['entity']['text'])
+
     # Build the data payload
     data = {
         "messages": [
@@ -30,6 +32,7 @@ def generate_llm_response(prompt):
 
     print("Data: ", json.dumps(data, indent=4))
 
+    # Send the request to the LLM
     response = requests.post(
         "http://localhost:55760/v1/chat/completions",
         json=data

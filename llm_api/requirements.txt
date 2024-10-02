@@ -1,6 +1,4 @@
 langchain
 faiss-cpu
-sentence-transformers
 fastapi
 uvicorn
-pymilvus==2.4.6
