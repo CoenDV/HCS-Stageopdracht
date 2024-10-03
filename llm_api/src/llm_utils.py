@@ -48,6 +48,7 @@ def createPayload(prompt: str, retrieved_docs: str):
 
 def generateResponse(data: str):
     return requests.post(
-        "http://10.88.0.49:55760/v1/chat/completions",
+        # Strange_hopper is auto generated name for podman AI container
+        "http://strange_hopper:8000/v1/chat/completions/",
         json=data
     )
