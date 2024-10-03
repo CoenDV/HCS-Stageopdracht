@@ -3,15 +3,15 @@ apiVersion: v1
 metadata:
   generateName: milvus-api-v4-5bd565fb78-
   annotations:
-    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.117.209/23"],"mac_address":"0a:58:0a:80:75:d1","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.117.209/23","gateway_ip":"10.128.116.1"}}'
+    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.116.169/23"],"mac_address":"0a:58:0a:80:74:a9","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.116.169/23","gateway_ip":"10.128.116.1"}}'
     k8s.v1.cni.cncf.io/network-status: |-
       [{
           "name": "ovn-kubernetes",
           "interface": "eth0",
           "ips": [
-              "10.128.117.209"
+              "10.128.116.169"
           ],
-          "mac": "0a:58:0a:80:75:d1",
+          "mac": "0a:58:0a:80:74:a9",
           "default": true,
           "dns": {}
       }]
@@ -19,15 +19,15 @@ metadata:
     openshift.io/generated-by: OpenShiftWebConsole
     openshift.io/scc: restricted-v2
     seccomp.security.alpha.kubernetes.io/pod: runtime/default
-  resourceVersion: '2514557086'
-  name: milvus-api-v4-5bd565fb78-w89bg
-  uid: 90a4b77c-bc3a-4e08-9877-e39b79797288
-  creationTimestamp: '2024-10-02T06:10:47Z'
+  resourceVersion: '2520123884'
+  name: milvus-api-v4-5bd565fb78-8cz99
+  uid: 98e3fa84-fd5e-4c3d-be4d-bd68380ca945
+  creationTimestamp: '2024-10-03T06:41:25Z'
   managedFields:
     - manager: ip-10-0-196-170
       operation: Update
       apiVersion: v1
-      time: '2024-10-02T06:10:47Z'
+      time: '2024-10-03T06:41:25Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
@@ -37,7 +37,7 @@ metadata:
     - manager: kube-controller-manager
       operation: Update
       apiVersion: v1
-      time: '2024-10-02T06:10:47Z'
+      time: '2024-10-03T06:41:25Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
@@ -78,7 +78,7 @@ metadata:
     - manager: multus-daemon
       operation: Update
       apiVersion: v1
-      time: '2024-10-02T06:10:47Z'
+      time: '2024-10-03T06:41:26Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
@@ -88,7 +88,7 @@ metadata:
     - manager: kubelet
       operation: Update
       apiVersion: v1
-      time: '2024-10-02T06:14:30Z'
+      time: '2024-10-03T06:41:27Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:status':
@@ -124,7 +124,7 @@ metadata:
           'f:podIP': {}
           'f:podIPs':
             .: {}
-            'k:{"ip":"10.128.117.209"}':
+            'k:{"ip":"10.128.116.169"}':
               .: {}
               'f:ip': {}
           'f:startTime': {}
@@ -180,14 +180,14 @@ spec:
           protocol: TCP
       imagePullPolicy: IfNotPresent
       volumeMounts:
-        - name: kube-api-access-vxvz5
+        - name: kube-api-access-vkhjc
           readOnly: true
           mountPath: /var/run/secrets/kubernetes.io/serviceaccount
       terminationMessagePolicy: File
       image: 'image-registry.openshift-image-registry.svc:5000/coen-de-vries-dev/milvus-api-v4@sha256:a2f26cb0a2ba74efe5d47a39a452ca12cd7f8fe82518249db7145db8b39a1742'
   serviceAccount: default
   volumes:
-    - name: kube-api-access-vxvz5
+    - name: kube-api-access-vkhjc
       projected:
         sources:
           - serviceAccountToken:
@@ -232,38 +232,38 @@ status:
       name: milvus-api-v4
       state:
         running:
-          startedAt: '2024-10-02T06:14:29Z'
+          startedAt: '2024-10-03T06:41:26Z'
       imageID: 'image-registry.openshift-image-registry.svc:5000/coen-de-vries-dev/milvus-api-v4@sha256:a2f26cb0a2ba74efe5d47a39a452ca12cd7f8fe82518249db7145db8b39a1742'
       image: 'image-registry.openshift-image-registry.svc:5000/coen-de-vries-dev/milvus-api-v4@sha256:a2f26cb0a2ba74efe5d47a39a452ca12cd7f8fe82518249db7145db8b39a1742'
       lastState: {}
-      containerID: 'cri-o://7cc8f77e0fc569ae21bd5163f87945c3b1e9de7e67610cf51fb4d994275c7aba'
+      containerID: 'cri-o://22371da6b4084044faff903a9da4d93bd69ce596f10134b8be754c8f1a16e3ff'
   qosClass: Burstable
   hostIPs:
     - ip: 10.0.196.170
   podIPs:
-    - ip: 10.128.117.209
-  podIP: 10.128.117.209
+    - ip: 10.128.116.169
+  podIP: 10.128.116.169
   hostIP: 10.0.196.170
-  startTime: '2024-10-02T06:10:47Z'
+  startTime: '2024-10-03T06:41:25Z'
   conditions:
     - type: PodReadyToStartContainers
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-02T06:14:30Z'
+      lastTransitionTime: '2024-10-03T06:41:27Z'
     - type: Initialized
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-02T06:10:47Z'
+      lastTransitionTime: '2024-10-03T06:41:25Z'
     - type: Ready
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-02T06:14:30Z'
+      lastTransitionTime: '2024-10-03T06:41:27Z'
     - type: ContainersReady
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-02T06:14:30Z'
+      lastTransitionTime: '2024-10-03T06:41:27Z'
     - type: PodScheduled
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-02T06:10:47Z'
+      lastTransitionTime: '2024-10-03T06:41:25Z'
   phase: Running

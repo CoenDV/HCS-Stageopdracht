@@ -1,83 +1,88 @@
 kind: Pod
 apiVersion: v1
 metadata:
-  generateName: milvus-standalone-567cb57d4c-
+  name: frontend-pod
+  namespace: coen-de-vries-dev
+  uid: d544f04a-d094-4b16-91cf-482aaf57a4bc
+  resourceVersion: '2520147563'
+  creationTimestamp: '2024-10-03T06:47:16Z'
+  labels:
+    app: frontend-pod
   annotations:
-    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.116.168/23"],"mac_address":"0a:58:0a:80:74:a8","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.116.168/23","gateway_ip":"10.128.116.1"}}'
+    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.116.182/23"],"mac_address":"0a:58:0a:80:74:b6","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.116.182/23","gateway_ip":"10.128.116.1"}}'
     k8s.v1.cni.cncf.io/network-status: |-
       [{
           "name": "ovn-kubernetes",
           "interface": "eth0",
           "ips": [
-              "10.128.116.168"
+              "10.128.116.182"
           ],
-          "mac": "0a:58:0a:80:74:a8",
+          "mac": "0a:58:0a:80:74:b6",
           "default": true,
           "dns": {}
       }]
-    kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for container milvus-standalone; cpu, memory limit for container milvus-standalone'
+    kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for container frontend; cpu, memory limit for container frontend'
     openshift.io/scc: restricted-v2
-    openshift.openshift.io/restartedAt: '2024-09-26T19:17:42.144Z'
     seccomp.security.alpha.kubernetes.io/pod: runtime/default
-  resourceVersion: '2520124403'
-  name: milvus-standalone-567cb57d4c-cd6nf
-  uid: b9cf90c5-b626-4109-bee8-89daabc10ff1
-  creationTimestamp: '2024-10-03T06:41:22Z'
   managedFields:
     - manager: ip-10-0-196-170
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:41:22Z'
+      time: '2024-10-03T06:47:16Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
           'f:annotations':
             'f:k8s.ovn.org/pod-networks': {}
       subresource: status
-    - manager: kube-controller-manager
+    - manager: multus-daemon
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:41:22Z'
+      time: '2024-10-03T06:47:16Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
           'f:annotations':
-            .: {}
-            'f:openshift.openshift.io/restartedAt': {}
-          'f:generateName': {}
+            'f:k8s.v1.cni.cncf.io/network-status': {}
+      subresource: status
+    - manager: unknown
+      operation: Update
+      apiVersion: v1
+      time: '2024-10-03T06:47:16Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
           'f:labels':
             .: {}
             'f:app': {}
-            'f:pod-template-hash': {}
-          'f:ownerReferences':
-            .: {}
-            'k:{"uid":"57dfd23d-764d-4c6c-96ca-b713b4d96cc4"}': {}
         'f:spec':
           'f:containers':
-            'k:{"name":"milvus-standalone"}':
+            'k:{"name":"frontend"}':
+              'f:tty': {}
               'f:image': {}
-              'f:volumeMounts':
-                .: {}
-                'k:{"mountPath":"/var/lib/milvus"}':
-                  .: {}
-                  'f:mountPath': {}
-                  'f:name': {}
               'f:terminationMessagePolicy': {}
               .: {}
               'f:resources': {}
-              'f:command': {}
+              'f:args': {}
+              'f:stdin': {}
               'f:env':
                 .: {}
-                'k:{"name":"ETCD_ENDPOINTS"}':
-                  .: {}
-                  'f:name': {}
-                  'f:value': {}
-                'k:{"name":"MINIO_ADDRESS"}':
+                'k:{"name":"TERM"}':
                   .: {}
                   'f:name': {}
                   'f:value': {}
               'f:terminationMessagePath': {}
               'f:imagePullPolicy': {}
+              'f:ports':
+                .: {}
+                'k:{"containerPort":80,"protocol":"TCP"}':
+                  .: {}
+                  'f:containerPort': {}
+                  'f:protocol': {}
+                'k:{"containerPort":8080,"protocol":"TCP"}':
+                  .: {}
+                  'f:containerPort': {}
+                  'f:protocol': {}
               'f:name': {}
           'f:dnsPolicy': {}
           'f:enableServiceLinks': {}
@@ -85,28 +90,10 @@ metadata:
           'f:schedulerName': {}
           'f:securityContext': {}
           'f:terminationGracePeriodSeconds': {}
-          'f:volumes':
-            .: {}
-            'k:{"name":"milvus-storage"}':
-              .: {}
-              'f:name': {}
-              'f:persistentVolumeClaim':
-                .: {}
-                'f:claimName': {}
-    - manager: multus-daemon
-      operation: Update
-      apiVersion: v1
-      time: '2024-10-03T06:41:33Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            'f:k8s.v1.cni.cncf.io/network-status': {}
-      subresource: status
     - manager: kubelet
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:41:34Z'
+      time: '2024-10-03T06:47:17Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:status':
@@ -142,22 +129,11 @@ metadata:
           'f:podIP': {}
           'f:podIPs':
             .: {}
-            'k:{"ip":"10.128.116.168"}':
+            'k:{"ip":"10.128.116.182"}':
               .: {}
               'f:ip': {}
           'f:startTime': {}
       subresource: status
-  namespace: coen-de-vries-dev
-  ownerReferences:
-    - apiVersion: apps/v1
-      kind: ReplicaSet
-      name: milvus-standalone-567cb57d4c
-      uid: 57dfd23d-764d-4c6c-96ca-b713b4d96cc4
-      controller: true
-      blockOwnerDeletion: true
-  labels:
-    app: milvus-standalone
-    pod-template-hash: 567cb57d4c
 spec:
   restartPolicy: Always
   serviceAccountName: default
@@ -183,17 +159,12 @@ spec:
         requests:
           cpu: 10m
           memory: 64Mi
+      stdin: true
       terminationMessagePath: /dev/termination-log
-      name: milvus-standalone
-      command:
-        - milvus
-        - run
-        - standalone
+      name: frontend
       env:
-        - name: ETCD_ENDPOINTS
-          value: 'etcd:2379'
-        - name: MINIO_ADDRESS
-          value: 'minio:9000'
+        - name: TERM
+          value: xterm
       securityContext:
         capabilities:
           drop:
@@ -201,21 +172,26 @@ spec:
         runAsUser: 1012910000
         runAsNonRoot: true
         allowPrivilegeEscalation: false
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 80
+          protocol: TCP
       imagePullPolicy: IfNotPresent
       volumeMounts:
-        - name: milvus-storage
-          mountPath: /var/lib/milvus
-        - name: kube-api-access-sz8hf
+        - name: kube-api-access-pkbh6
           readOnly: true
           mountPath: /var/run/secrets/kubernetes.io/serviceaccount
       terminationMessagePolicy: File
-      image: 'milvusdb/milvus:v2.4.11'
+      tty: true
+      image: 'default-route-openshift-image-registry.apps.sandbox-m4.g2pi.p1.openshiftapps.com/coen-de-vries-dev/frontend-v2:latest'
+      args:
+        - nginx
+        - '-g'
+        - daemon off;
   serviceAccount: default
   volumes:
-    - name: milvus-storage
-      persistentVolumeClaim:
-        claimName: milvus-pvc
-    - name: kube-api-access-sz8hf
+    - name: kube-api-access-pkbh6
       projected:
         sources:
           - serviceAccountToken:
@@ -257,41 +233,41 @@ status:
     - restartCount: 0
       started: true
       ready: true
-      name: milvus-standalone
+      name: frontend
       state:
         running:
-          startedAt: '2024-10-03T06:41:33Z'
-      imageID: 'default-route-openshift-image-registry.apps.sandbox-m4.g2pi.p1.openshiftapps.com/coen-de-vries-dev/milvus@sha256:19118865a34ce515934628f6c2d9bb9b28b83676844aa7ee87a9f3c3dfe9a56f'
-      image: 'docker.io/milvusdb/milvus:v2.4.11'
+          startedAt: '2024-10-03T06:47:17Z'
+      imageID: 'default-route-openshift-image-registry.apps.sandbox-m4.g2pi.p1.openshiftapps.com/coen-de-vries-dev/frontend-v2@sha256:2b9ee11f7aa331ee8ade1d98f6fc1296846e0a114bb0a4b5c699c53312fa31cb'
+      image: 'default-route-openshift-image-registry.apps.sandbox-m4.g2pi.p1.openshiftapps.com/coen-de-vries-dev/frontend-v2:latest'
       lastState: {}
-      containerID: 'cri-o://911c4895768d00f394e4501e1257c9e26d1fcb8a3663e413b5a71e093b051363'
+      containerID: 'cri-o://94bb8a4102915ee0f4c4b277f20e33f7d5a1991d5b6c22e4b05810a7c0ad7e4b'
   qosClass: Burstable
   hostIPs:
     - ip: 10.0.196.170
   podIPs:
-    - ip: 10.128.116.168
-  podIP: 10.128.116.168
+    - ip: 10.128.116.182
+  podIP: 10.128.116.182
   hostIP: 10.0.196.170
-  startTime: '2024-10-03T06:41:22Z'
+  startTime: '2024-10-03T06:47:16Z'
   conditions:
     - type: PodReadyToStartContainers
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:34Z'
+      lastTransitionTime: '2024-10-03T06:47:17Z'
     - type: Initialized
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:22Z'
+      lastTransitionTime: '2024-10-03T06:47:16Z'
     - type: Ready
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:34Z'
+      lastTransitionTime: '2024-10-03T06:47:17Z'
     - type: ContainersReady
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:34Z'
+      lastTransitionTime: '2024-10-03T06:47:17Z'
     - type: PodScheduled
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:22Z'
+      lastTransitionTime: '2024-10-03T06:47:16Z'
   phase: Running
