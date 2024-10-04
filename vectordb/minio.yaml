@@ -3,30 +3,30 @@ apiVersion: v1
 metadata:
   generateName: milvus-minio-66795b79bb-
   annotations:
-    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.116.167/23"],"mac_address":"0a:58:0a:80:74:a7","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.116.167/23","gateway_ip":"10.128.116.1"}}'
+    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.116.19/23"],"mac_address":"0a:58:0a:80:74:13","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.116.19/23","gateway_ip":"10.128.116.1"}}'
     k8s.v1.cni.cncf.io/network-status: |-
       [{
           "name": "ovn-kubernetes",
           "interface": "eth0",
           "ips": [
-              "10.128.116.167"
+              "10.128.116.19"
           ],
-          "mac": "0a:58:0a:80:74:a7",
+          "mac": "0a:58:0a:80:74:13",
           "default": true,
           "dns": {}
       }]
     kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for container milvus-minio; cpu, memory limit for container milvus-minio'
     openshift.io/scc: restricted-v2
     seccomp.security.alpha.kubernetes.io/pod: runtime/default
-  resourceVersion: '2520123661'
-  name: milvus-minio-66795b79bb-8529q
-  uid: 54415153-7186-4987-ba02-01b557519dc2
-  creationTimestamp: '2024-10-03T06:41:20Z'
+  resourceVersion: '2525427270'
+  name: milvus-minio-66795b79bb-hqkfr
+  uid: 715404d9-ce8c-49c3-bb50-4ed7ebc17e9c
+  creationTimestamp: '2024-10-04T06:01:13Z'
   managedFields:
     - manager: ip-10-0-196-170
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:41:20Z'
+      time: '2024-10-04T06:01:13Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
@@ -36,7 +36,7 @@ metadata:
     - manager: kube-controller-manager
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:41:20Z'
+      time: '2024-10-04T06:01:13Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
@@ -116,7 +116,7 @@ metadata:
     - manager: multus-daemon
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:41:23Z'
+      time: '2024-10-04T06:01:19Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
@@ -126,7 +126,7 @@ metadata:
     - manager: kubelet
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:41:24Z'
+      time: '2024-10-04T06:01:20Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:status':
@@ -162,7 +162,7 @@ metadata:
           'f:podIP': {}
           'f:podIPs':
             .: {}
-            'k:{"ip":"10.128.116.167"}':
+            'k:{"ip":"10.128.116.19"}':
               .: {}
               'f:ip': {}
           'f:startTime': {}
@@ -244,7 +244,7 @@ spec:
       volumeMounts:
         - name: minio-storage
           mountPath: /minio_data
-        - name: kube-api-access-l9dhs
+        - name: kube-api-access-g2n57
           readOnly: true
           mountPath: /var/run/secrets/kubernetes.io/serviceaccount
       terminationMessagePolicy: File
@@ -254,7 +254,7 @@ spec:
     - name: minio-storage
       persistentVolumeClaim:
         claimName: minio-pvc
-    - name: kube-api-access-l9dhs
+    - name: kube-api-access-g2n57
       projected:
         sources:
           - serviceAccountToken:
@@ -299,38 +299,38 @@ status:
       name: milvus-minio
       state:
         running:
-          startedAt: '2024-10-03T06:41:23Z'
+          startedAt: '2024-10-04T06:01:19Z'
       imageID: 'default-route-openshift-image-registry.apps.sandbox-m4.g2pi.p1.openshiftapps.com/coen-de-vries-dev/minio@sha256:6150a378e4636a713209465c57045cacac0ee0ecb0b72f5d23da4314145aa0d4'
       image: 'docker.io/minio/minio:RELEASE.2023-03-20T20-16-18Z'
       lastState: {}
-      containerID: 'cri-o://2db25e48f5cc637764d4303846476f3f0022272d41491efc82f4f33752283ed2'
+      containerID: 'cri-o://b16c6a0d0baf2556eee190fab467a0eb5aaed616d1549f019624439263a8f349'
   qosClass: Burstable
   hostIPs:
     - ip: 10.0.196.170
   podIPs:
-    - ip: 10.128.116.167
-  podIP: 10.128.116.167
+    - ip: 10.128.116.19
+  podIP: 10.128.116.19
   hostIP: 10.0.196.170
-  startTime: '2024-10-03T06:41:20Z'
+  startTime: '2024-10-04T06:01:13Z'
   conditions:
     - type: PodReadyToStartContainers
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:24Z'
+      lastTransitionTime: '2024-10-04T06:01:20Z'
     - type: Initialized
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:20Z'
+      lastTransitionTime: '2024-10-04T06:01:13Z'
     - type: Ready
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:24Z'
+      lastTransitionTime: '2024-10-04T06:01:20Z'
     - type: ContainersReady
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:24Z'
+      lastTransitionTime: '2024-10-04T06:01:20Z'
     - type: PodScheduled
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:41:20Z'
+      lastTransitionTime: '2024-10-04T06:01:13Z'
   phase: Running

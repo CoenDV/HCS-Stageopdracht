@@ -1,54 +1,44 @@
 kind: Pod
 apiVersion: v1
 metadata:
-  name: frontend-pod
+  name: frontend-v2-pod
   namespace: coen-de-vries-dev
-  uid: d544f04a-d094-4b16-91cf-482aaf57a4bc
-  resourceVersion: '2520147563'
-  creationTimestamp: '2024-10-03T06:47:16Z'
+  uid: ba4904f2-b900-46fc-b9df-6ab4e68cf9d0
+  resourceVersion: '2525544209'
+  creationTimestamp: '2024-10-04T06:31:54Z'
   labels:
-    app: frontend-pod
+    app: frontend-v2-pod
   annotations:
-    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.116.182/23"],"mac_address":"0a:58:0a:80:74:b6","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.116.182/23","gateway_ip":"10.128.116.1"}}'
+    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.116.68/23"],"mac_address":"0a:58:0a:80:74:44","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.116.68/23","gateway_ip":"10.128.116.1"}}'
     k8s.v1.cni.cncf.io/network-status: |-
       [{
           "name": "ovn-kubernetes",
           "interface": "eth0",
           "ips": [
-              "10.128.116.182"
+              "10.128.116.68"
           ],
-          "mac": "0a:58:0a:80:74:b6",
+          "mac": "0a:58:0a:80:74:44",
           "default": true,
           "dns": {}
       }]
-    kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for container frontend; cpu, memory limit for container frontend'
+    kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for container frontend-v2; cpu, memory limit for container frontend-v2'
     openshift.io/scc: restricted-v2
     seccomp.security.alpha.kubernetes.io/pod: runtime/default
   managedFields:
     - manager: ip-10-0-196-170
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:47:16Z'
+      time: '2024-10-04T06:31:54Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
           'f:annotations':
             'f:k8s.ovn.org/pod-networks': {}
       subresource: status
-    - manager: multus-daemon
-      operation: Update
-      apiVersion: v1
-      time: '2024-10-03T06:47:16Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            'f:k8s.v1.cni.cncf.io/network-status': {}
-      subresource: status
     - manager: unknown
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:47:16Z'
+      time: '2024-10-04T06:31:54Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
@@ -57,7 +47,7 @@ metadata:
             'f:app': {}
         'f:spec':
           'f:containers':
-            'k:{"name":"frontend"}':
+            'k:{"name":"frontend-v2"}':
               'f:tty': {}
               'f:image': {}
               'f:terminationMessagePolicy': {}
@@ -93,7 +83,7 @@ metadata:
     - manager: kubelet
       operation: Update
       apiVersion: v1
-      time: '2024-10-03T06:47:17Z'
+      time: '2024-10-04T06:31:55Z'
       fieldsType: FieldsV1
       fieldsV1:
         'f:status':
@@ -129,10 +119,20 @@ metadata:
           'f:podIP': {}
           'f:podIPs':
             .: {}
-            'k:{"ip":"10.128.116.182"}':
+            'k:{"ip":"10.128.116.68"}':
               .: {}
               'f:ip': {}
           'f:startTime': {}
+      subresource: status
+    - manager: multus-daemon
+      operation: Update
+      apiVersion: v1
+      time: '2024-10-04T06:31:55Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:k8s.v1.cni.cncf.io/network-status': {}
       subresource: status
 spec:
   restartPolicy: Always
@@ -161,7 +161,7 @@ spec:
           memory: 64Mi
       stdin: true
       terminationMessagePath: /dev/termination-log
-      name: frontend
+      name: frontend-v2
       env:
         - name: TERM
           value: xterm
@@ -179,7 +179,7 @@ spec:
           protocol: TCP
       imagePullPolicy: IfNotPresent
       volumeMounts:
-        - name: kube-api-access-pkbh6
+        - name: kube-api-access-754lx
           readOnly: true
           mountPath: /var/run/secrets/kubernetes.io/serviceaccount
       terminationMessagePolicy: File
@@ -191,7 +191,7 @@ spec:
         - daemon off;
   serviceAccount: default
   volumes:
-    - name: kube-api-access-pkbh6
+    - name: kube-api-access-754lx
       projected:
         sources:
           - serviceAccountToken:
@@ -233,41 +233,41 @@ status:
     - restartCount: 0
       started: true
       ready: true
-      name: frontend
+      name: frontend-v2
       state:
         running:
-          startedAt: '2024-10-03T06:47:17Z'
+          startedAt: '2024-10-04T06:31:55Z'
       imageID: 'default-route-openshift-image-registry.apps.sandbox-m4.g2pi.p1.openshiftapps.com/coen-de-vries-dev/frontend-v2@sha256:2b9ee11f7aa331ee8ade1d98f6fc1296846e0a114bb0a4b5c699c53312fa31cb'
       image: 'default-route-openshift-image-registry.apps.sandbox-m4.g2pi.p1.openshiftapps.com/coen-de-vries-dev/frontend-v2:latest'
       lastState: {}
-      containerID: 'cri-o://94bb8a4102915ee0f4c4b277f20e33f7d5a1991d5b6c22e4b05810a7c0ad7e4b'
+      containerID: 'cri-o://16c04dc6d02c61dbc117be1be435252a0a6309dea9879114b506f673a4d5f85c'
   qosClass: Burstable
   hostIPs:
     - ip: 10.0.196.170
   podIPs:
-    - ip: 10.128.116.182
-  podIP: 10.128.116.182
+    - ip: 10.128.116.68
+  podIP: 10.128.116.68
   hostIP: 10.0.196.170
-  startTime: '2024-10-03T06:47:16Z'
+  startTime: '2024-10-04T06:31:54Z'
   conditions:
     - type: PodReadyToStartContainers
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:47:17Z'
+      lastTransitionTime: '2024-10-04T06:31:55Z'
     - type: Initialized
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:47:16Z'
+      lastTransitionTime: '2024-10-04T06:31:54Z'
     - type: Ready
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:47:17Z'
+      lastTransitionTime: '2024-10-04T06:31:55Z'
     - type: ContainersReady
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:47:17Z'
+      lastTransitionTime: '2024-10-04T06:31:55Z'
     - type: PodScheduled
       status: 'True'
       lastProbeTime: null
-      lastTransitionTime: '2024-10-03T06:47:16Z'
+      lastTransitionTime: '2024-10-04T06:31:54Z'
   phase: Running
