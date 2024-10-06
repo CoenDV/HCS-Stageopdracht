@@ -1,297 +1,54 @@
-kind: Pod
-apiVersion: v1
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  generateName: milvus-standalone-567cb57d4c-
-  annotations:
-    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.116.20/23"],"mac_address":"0a:58:0a:80:74:14","gateway_ips":["10.128.116.1"],"routes":[{"dest":"10.128.0.0/16","nextHop":"10.128.116.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.116.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.116.1"}],"ip_address":"10.128.116.20/23","gateway_ip":"10.128.116.1"}}'
-    k8s.v1.cni.cncf.io/network-status: |-
-      [{
-          "name": "ovn-kubernetes",
-          "interface": "eth0",
-          "ips": [
-              "10.128.116.20"
-          ],
-          "mac": "0a:58:0a:80:74:14",
-          "default": true,
-          "dns": {}
-      }]
-    kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for container milvus-standalone; cpu, memory limit for container milvus-standalone'
-    openshift.io/scc: restricted-v2
-    openshift.openshift.io/restartedAt: '2024-09-26T19:17:42.144Z'
-    seccomp.security.alpha.kubernetes.io/pod: runtime/default
-  resourceVersion: '2525427263'
-  name: milvus-standalone-567cb57d4c-d829t
-  uid: 618ce42c-5bb2-4ef6-b82b-69e1d96c5f6b
-  creationTimestamp: '2024-10-04T06:01:16Z'
-  managedFields:
-    - manager: ip-10-0-196-170
-      operation: Update
-      apiVersion: v1
-      time: '2024-10-04T06:01:16Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            'f:k8s.ovn.org/pod-networks': {}
-      subresource: status
-    - manager: kube-controller-manager
-      operation: Update
-      apiVersion: v1
-      time: '2024-10-04T06:01:16Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            .: {}
-            'f:openshift.openshift.io/restartedAt': {}
-          'f:generateName': {}
-          'f:labels':
-            .: {}
-            'f:app': {}
-            'f:pod-template-hash': {}
-          'f:ownerReferences':
-            .: {}
-            'k:{"uid":"57dfd23d-764d-4c6c-96ca-b713b4d96cc4"}': {}
-        'f:spec':
-          'f:containers':
-            'k:{"name":"milvus-standalone"}':
-              'f:image': {}
-              'f:volumeMounts':
-                .: {}
-                'k:{"mountPath":"/var/lib/milvus"}':
-                  .: {}
-                  'f:mountPath': {}
-                  'f:name': {}
-              'f:terminationMessagePolicy': {}
-              .: {}
-              'f:resources': {}
-              'f:command': {}
-              'f:env':
-                .: {}
-                'k:{"name":"ETCD_ENDPOINTS"}':
-                  .: {}
-                  'f:name': {}
-                  'f:value': {}
-                'k:{"name":"MINIO_ADDRESS"}':
-                  .: {}
-                  'f:name': {}
-                  'f:value': {}
-              'f:terminationMessagePath': {}
-              'f:imagePullPolicy': {}
-              'f:name': {}
-          'f:dnsPolicy': {}
-          'f:enableServiceLinks': {}
-          'f:restartPolicy': {}
-          'f:schedulerName': {}
-          'f:securityContext': {}
-          'f:terminationGracePeriodSeconds': {}
-          'f:volumes':
-            .: {}
-            'k:{"name":"milvus-storage"}':
-              .: {}
-              'f:name': {}
-              'f:persistentVolumeClaim':
-                .: {}
-                'f:claimName': {}
-    - manager: multus-daemon
-      operation: Update
-      apiVersion: v1
-      time: '2024-10-04T06:01:19Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            'f:k8s.v1.cni.cncf.io/network-status': {}
-      subresource: status
-    - manager: kubelet
-      operation: Update
-      apiVersion: v1
-      time: '2024-10-04T06:01:20Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:status':
-          'f:conditions':
-            'k:{"type":"ContainersReady"}':
-              .: {}
-              'f:lastProbeTime': {}
-              'f:lastTransitionTime': {}
-              'f:status': {}
-              'f:type': {}
-            'k:{"type":"Initialized"}':
-              .: {}
-              'f:lastProbeTime': {}
-              'f:lastTransitionTime': {}
-              'f:status': {}
-              'f:type': {}
-            'k:{"type":"PodReadyToStartContainers"}':
-              .: {}
-              'f:lastProbeTime': {}
-              'f:lastTransitionTime': {}
-              'f:status': {}
-              'f:type': {}
-            'k:{"type":"Ready"}':
-              .: {}
-              'f:lastProbeTime': {}
-              'f:lastTransitionTime': {}
-              'f:status': {}
-              'f:type': {}
-          'f:containerStatuses': {}
-          'f:hostIP': {}
-          'f:hostIPs': {}
-          'f:phase': {}
-          'f:podIP': {}
-          'f:podIPs':
-            .: {}
-            'k:{"ip":"10.128.116.20"}':
-              .: {}
-              'f:ip': {}
-          'f:startTime': {}
-      subresource: status
-  namespace: coen-de-vries-dev
-  ownerReferences:
-    - apiVersion: apps/v1
-      kind: ReplicaSet
-      name: milvus-standalone-567cb57d4c
-      uid: 57dfd23d-764d-4c6c-96ca-b713b4d96cc4
-      controller: true
-      blockOwnerDeletion: true
-  labels:
-    app: milvus-standalone
-    pod-template-hash: 567cb57d4c
+  name: milvus-standalone
 spec:
-  restartPolicy: Always
-  serviceAccountName: default
-  imagePullSecrets:
-    - name: default-dockercfg-cxxht
-  priority: -3
-  schedulerName: default-scheduler
-  enableServiceLinks: true
-  terminationGracePeriodSeconds: 30
-  preemptionPolicy: PreemptLowerPriority
-  nodeName: ip-10-0-196-170.ec2.internal
-  securityContext:
-    seLinuxOptions:
-      level: 's0:c114,c14'
-    fsGroup: 1012910000
-    seccompProfile:
-      type: RuntimeDefault
-  containers:
-    - resources:
-        limits:
-          cpu: '1'
-          memory: 1000Mi
-        requests:
-          cpu: 10m
-          memory: 64Mi
-      terminationMessagePath: /dev/termination-log
-      name: milvus-standalone
-      command:
-        - milvus
-        - run
-        - standalone
-      env:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: milvus-standalone
+  template:
+    metadata:
+      labels:
+        app: milvus-standalone
+    spec:
+      containers:
+      - name: milvus-standalone
+        image: milvusdb/milvus:v2.4.11
+        command: ["milvus", "run", "standalone"]
+        env:
         - name: ETCD_ENDPOINTS
-          value: 'etcd:2379'
+          value: "milvus-etcd:2379"
         - name: MINIO_ADDRESS
-          value: 'minio:9000'
-      securityContext:
-        capabilities:
-          drop:
-            - ALL
-        runAsUser: 1012910000
-        runAsNonRoot: true
-        allowPrivilegeEscalation: false
-      imagePullPolicy: IfNotPresent
-      volumeMounts:
-        - name: milvus-storage
-          mountPath: /var/lib/milvus
-        - name: kube-api-access-2bkhl
-          readOnly: true
-          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-      terminationMessagePolicy: File
-      image: 'milvusdb/milvus:v2.4.11'
-  serviceAccount: default
-  volumes:
-    - name: milvus-storage
-      persistentVolumeClaim:
-        claimName: milvus-pvc
-    - name: kube-api-access-2bkhl
-      projected:
-        sources:
-          - serviceAccountToken:
-              expirationSeconds: 3607
-              path: token
-          - configMap:
-              name: kube-root-ca.crt
-              items:
-                - key: ca.crt
-                  path: ca.crt
-          - downwardAPI:
-              items:
-                - path: namespace
-                  fieldRef:
-                    apiVersion: v1
-                    fieldPath: metadata.namespace
-          - configMap:
-              name: openshift-service-ca.crt
-              items:
-                - key: service-ca.crt
-                  path: service-ca.crt
-        defaultMode: 420
-  dnsPolicy: ClusterFirst
-  tolerations:
-    - key: node.kubernetes.io/not-ready
-      operator: Exists
-      effect: NoExecute
-      tolerationSeconds: 300
-    - key: node.kubernetes.io/unreachable
-      operator: Exists
-      effect: NoExecute
-      tolerationSeconds: 300
-    - key: node.kubernetes.io/memory-pressure
-      operator: Exists
-      effect: NoSchedule
-  priorityClassName: sandbox-users-pods
-status:
-  containerStatuses:
-    - restartCount: 0
-      started: true
-      ready: true
-      name: milvus-standalone
-      state:
-        running:
-          startedAt: '2024-10-04T06:01:19Z'
-      imageID: 'default-route-openshift-image-registry.apps.sandbox-m4.g2pi.p1.openshiftapps.com/coen-de-vries-dev/milvus@sha256:19118865a34ce515934628f6c2d9bb9b28b83676844aa7ee87a9f3c3dfe9a56f'
-      image: 'docker.io/milvusdb/milvus:v2.4.11'
-      lastState: {}
-      containerID: 'cri-o://94063db1e10af267e51fd24ba3b79c44dcb7a386f021b54c3674a5cd754fcc62'
-  qosClass: Burstable
-  hostIPs:
-    - ip: 10.0.196.170
-  podIPs:
-    - ip: 10.128.116.20
-  podIP: 10.128.116.20
-  hostIP: 10.0.196.170
-  startTime: '2024-10-04T06:01:16Z'
-  conditions:
-    - type: PodReadyToStartContainers
-      status: 'True'
-      lastProbeTime: null
-      lastTransitionTime: '2024-10-04T06:01:20Z'
-    - type: Initialized
-      status: 'True'
-      lastProbeTime: null
-      lastTransitionTime: '2024-10-04T06:01:16Z'
-    - type: Ready
-      status: 'True'
-      lastProbeTime: null
-      lastTransitionTime: '2024-10-04T06:01:20Z'
-    - type: ContainersReady
-      status: 'True'
-      lastProbeTime: null
-      lastTransitionTime: '2024-10-04T06:01:20Z'
-    - type: PodScheduled
-      status: 'True'
-      lastProbeTime: null
-      lastTransitionTime: '2024-10-04T06:01:16Z'
-  phase: Running
+          value: "milvus-minio:9000"
+        volumeMounts:
+        - mountPath: /var/lib/milvus
+          name: milvus-storage
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9091
+          initialDelaySeconds: 90
+          timeoutSeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+      volumes:
+      - name: milvus-storage
+        persistentVolumeClaim:
+          claimName: milvus-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: milvus-standalone
+spec:
+  ports:
+  - port: 19530
+    targetPort: 19530
+    name: milvus-port
+  - port: 9091
+    targetPort: 9091
+    name: milvus-health
+  selector:
+    app: milvus-standalone
