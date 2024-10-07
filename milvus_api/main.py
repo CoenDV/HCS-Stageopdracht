@@ -15,11 +15,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+milvus_uri = "http://milvus-standalone" # Change this to the IP address of your Milvus server
+
 @app.post("/prepare/")
 async def generate_text():
     model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
     milvus_client = MilvusClient(
-        uri="http://172.30.24.69", # Change this to the IP address of your Milvus server
+        uri=milvus_uri,
         port="19530",
     )
 
@@ -67,7 +69,7 @@ class SearchRequest(BaseModel):
 async def search_text(request: SearchRequest):
     model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
     milvus_client = MilvusClient(
-        uri="http://172.30.24.69", # Change this to the IP address of your Milvus server
+        uri=milvus_uri,
         port="19530",
     )
 

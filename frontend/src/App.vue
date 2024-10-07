@@ -6,25 +6,14 @@ export default {
   components: {},
   data() {
     return {
-      msg: 'Welcome to Red Hat AI Chatbot',
       question: '',
       aiMsg: '',
     };
   },
   mounted() {
-    this.getBackendMessage();
+    
   },
   methods: {
-    getBackendMessage() {
-      axios.get("https://openshift-test-git-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/api/")
-        .then(response => {
-          this.msg = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-
     askQuestion() {
       axios.post("https://saved-ferret-rapid.ngrok-free.app/generate/",
         {
@@ -46,7 +35,7 @@ export default {
 <template>
   <main class="d-flex justify-content-center row col-3">
     <img alt="red hat Logo" src="/images/redhat.webp" class="img-fluid">
-    <p class="text-center">{{ msg }}</p>
+    <p class="text-center">Welcome to Red Hat AI Chatbot</p>
 
     <h1>Ask a question: </h1>
     <input type="text" class="form-control m-1" v-model="question" />

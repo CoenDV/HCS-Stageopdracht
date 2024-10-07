@@ -18,7 +18,7 @@ def generate_llm_response(prompt):
 
 def getRelevantDocuments(prompt: str):
     return requests.post(
-        "https://milvus-api-v4-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
+        "https://milvus-api-v1-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
         json={"query": prompt}
     )
 

@@ -13,9 +13,9 @@ COPY requirements.txt .
 # Install the required Python packages
 RUN pip install -r requirements.txt
 
-# Create the .cache directory and give user id 1012910000 full access with group permissions
+# Create the .cache directory and give user full access with group permissions
 RUN mkdir -p /app/.cache && \
-    chown -R 1012910000:1012910000 /app/.cache && \
+    chown -R 1001380000:1001380000 /app/.cache && \
     chmod -R 770 /app/.cache
 
 # Copy the entire FastAPI application into the container
