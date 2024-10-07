@@ -11,7 +11,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install the required Python packages
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Create the .cache directory and give user full access with group permissions
 RUN mkdir -p /app/.cache && \
