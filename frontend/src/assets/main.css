@@ -1,0 +1,51 @@
+body {
+    background-color: #0A2F33;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #FE0000;
+    color: #FFF;
+}
+
+.btn-primary, .btn-primary:active, .btn-primary:focus, .btn-primary:hover {
+    background-color: #FE0000;
+    border-color: #FE0000;
+}
+
+.btn-square-md {
+    width: 250px !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    height: 250px !important;
+    text-align: center;
+    padding: 0px;
+    font-size: 12px;
+    background-color: #FE0000;
+    border-color: #FE0000;
+    color: #FFF;
+}
+
+.btn-square-md:hover {
+    background-color: #FE0000;
+    border-color: #FE0000;
+    color: #FFF;
+}
+
+.card {
+    box-shadow: 5px 5px #FE0000;
+}
+
+.modal-dialog {
+    position: absolute;
+    bottom: 100px;
+    right: 50px;
+    width:25%;
+}
+
+.modal-content {
+    height: 500px;
+}
+
+.modal-backdrop {
+    background-color: transparent;
+}
