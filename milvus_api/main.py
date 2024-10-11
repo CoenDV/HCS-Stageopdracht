@@ -16,21 +16,21 @@ app.add_middleware(
 )
 
 milvus_uri = "http://milvus-standalone" # Change this to the IP address of your Milvus server
+model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
 
 @app.post("/prepare/")
 async def generate_text():
-    model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
     milvus_client = MilvusClient(
         uri=milvus_uri,
         port="19530",
     )
 
     # create collection
-    if milvus_client.has_collection("demo_collection"):
-        milvus_client.drop_collection("demo_collection")
+    if milvus_client.has_collection("HCS_Insurance"):
+        milvus_client.drop_collection("HCS_Insurance")
 
     milvus_client.create_collection(
-        collection_name="demo_collection", 
+        collection_name="HCS_Insurance", 
         dimension=384,
         metric_type="IP",
         index_type="IVF_FLAT",
@@ -39,13 +39,12 @@ async def generate_text():
     # prepare documents
     print("Preparing documents...")
     docs = []
-    vectors = []
 
     for file_path in glob("./documents/*.txt", recursive=True):
         with open(file_path, "r") as file:
             file_text = file.read()
             docs.append(file_text)
-            vectors.append(model.encode(file_text))
+    vectors = model.encode(docs)
 
     data = [
         {"id": i, "vector": vectors[i], "text": docs[i], "subject": "insurance"}
@@ -54,11 +53,13 @@ async def generate_text():
 
     # insert data
     print("Inserting data...")
-    res = milvus_client.insert(collection_name="demo_collection", data=data)
-    print(milvus_client.describe_collection("demo_collection"))
+    res = milvus_client.insert(collection_name="HCS_Insurance", data=data)
+    print(milvus_client.describe_collection("HCS_Insurance"))
     print(res)
 
     return {"response": "Data prepared successfully"}
+
+
 
 class SearchRequest(BaseModel):
     query: str
@@ -67,7 +68,6 @@ class SearchRequest(BaseModel):
 
 @app.post("/search/")
 async def search_text(request: SearchRequest):
-    model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
     milvus_client = MilvusClient(
         uri=milvus_uri,
         port="19530",
@@ -83,7 +83,7 @@ async def search_text(request: SearchRequest):
     }
 
     result = milvus_client.search(
-        collection_name="demo_collection", 
+        collection_name="HCS_Insurance", 
         data=query_embedding,
         limit=request.top_k,
         search_params=search_params,

@@ -1,5 +1,18 @@
 import requests
 import json
+from transformers import pipeline
+from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
+
+llm_pipeline = pipeline(
+    task="text-generation",
+    model="liminerity/Phigments12",
+    trust_remote_code=True,
+    torch_dtype="auto",
+    device_map="auto",
+    max_new_tokens=5
+)
+
+hf = HuggingFacePipeline(pipeline=llm_pipeline)
 
 def generate_llm_response(prompt):
 
@@ -8,7 +21,9 @@ def generate_llm_response(prompt):
     data = createPayload(prompt, retrieved_docs)
     print("Data: ", json.dumps(data, indent=4))
 
-    response = generateResponse(data)
+    #response = generateResponse(data)
+    response = hf.invoke("What is full covearge insurance?")
+    print("Response: ", response)
     
     response.raise_for_status()
 
@@ -18,7 +33,7 @@ def generate_llm_response(prompt):
 
 def getRelevantDocuments(prompt: str):
     return requests.post(
-        "https://milvus-api-v1-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
+        "https://milvus-api-v3-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
         json={"query": prompt}
     )
 
@@ -47,8 +62,4 @@ def createPayload(prompt: str, retrieved_docs: str):
     }
 
 def generateResponse(data: str):
-    return requests.post(
-        # Strange_hopper is auto generated name for podman AI container
-        "http://strange_hopper:8000/v1/chat/completions/",
-        json=data
-    )
+    return hf.invoke(data)

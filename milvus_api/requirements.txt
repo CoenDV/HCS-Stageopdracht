@@ -1,6 +1,5 @@
 fastapi
 uvicorn
 pymilvus
-sentence-transformers
 pydantic
 glob2
