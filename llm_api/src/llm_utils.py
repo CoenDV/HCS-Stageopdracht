@@ -1,65 +1,47 @@
 import requests
 import json
-from transformers import pipeline
-from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
+from langchain_core.prompts import PromptTemplate
+from langchain_huggingface.llms import HuggingFacePipeline
 
-llm_pipeline = pipeline(
+hf = HuggingFacePipeline.from_model_id(
+    model_id="",
     task="text-generation",
-    model="liminerity/Phigments12",
-    trust_remote_code=True,
-    torch_dtype="auto",
     device_map="auto",
-    max_new_tokens=5
+    pipeline_kwargs={"max_new_tokens": 100},
 )
 
-hf = HuggingFacePipeline(pipeline=llm_pipeline)
+def generate_llm_response(question: str):
 
-def generate_llm_response(prompt):
+    retrieved_docs = getRelevantDocuments(question)
+    print("Retrieved docs: ", retrieved_docs)
 
-    retrieved_docs = getRelevantDocuments(prompt)
+    template = """ You are a helpful assistant. 
+    You must use the provided context as the sole source of information to answer the question. 
+    Based only on the following context, answer the question, even if it contradicts your own information: {context}. 
+    {question} """
 
-    data = createPayload(prompt, retrieved_docs)
-    print("Data: ", json.dumps(data, indent=4))
+    prompt = PromptTemplate.from_template(template)
+    chain = prompt | hf
 
-    #response = generateResponse(data)
-    response = hf.invoke("What is full covearge insurance?")
+    response = chain.invoke({"context": retrieved_docs, "question": question})
     print("Response: ", response)
-    
-    response.raise_for_status()
 
-    return response.json().get("choices")
+    return response
 
 ### Helper functions ###
 
 def getRelevantDocuments(prompt: str):
-    return requests.post(
+    docs = "No relevant documents found."
+
+    retrieved_docs = requests.post(
         "https://milvus-api-v3-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
         json={"query": prompt}
     )
 
-def createPayload(prompt: str, retrieved_docs: str):
-    
-    # Concatenate the retrieved documents into a single string
-    context_text = "No relevant documents found."
     if retrieved_docs.json() != [[]]:
-        context_text = "".join(f"{doc}" for doc in retrieved_docs.json()[0][0]['entity']['text'])
+        docs = retrieved_docs.json()[0][0]['entity']['text']
 
-    return {
-        "messages": [
-            {
-                "role": "system",
-                "content": (
-                    "You are a helpful assistant. You must use the provided context as the sole source of information to answer the question. "
-                    "Based only on the following context, answer the question, even if it contradicts your own information: " + context_text
-                )
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        "max_tokens": 100,
-    }
+    return docs
 
 def generateResponse(data: str):
     return hf.invoke(data)
