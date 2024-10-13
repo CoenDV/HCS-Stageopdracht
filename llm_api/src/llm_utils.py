@@ -4,7 +4,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_huggingface.llms import HuggingFacePipeline
 
 hf = HuggingFacePipeline.from_model_id(
-    model_id="",
+    model_id="KingNish/Reasoning-Llama-1b-v0.1",
     task="text-generation",
     device_map="auto",
     pipeline_kwargs={"max_new_tokens": 100},
