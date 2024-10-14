@@ -13,7 +13,9 @@ export default {
     methods: {
         askQuestion() {
             this.answerGenerating = true;
+            this.question = document.getElementById('question').value;
             this.answer = '';
+            document.getElementById('question').value = '';
 
             axios.post("https://saved-ferret-rapid.ngrok-free.app/generate/",
                 {
@@ -39,7 +41,7 @@ export default {
             class="img-fluid"></button>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">HCS-Chatbot</h1>
@@ -51,13 +53,13 @@ export default {
                         {{ question }}
                     </p>
 
-                    <p v-if="answer != ''" class="row col-10 p-2 bg-secondary rounded">
+                    <p v-if="answer != ''" class="row col-10 p-2 bg-secondary-subtle rounded">
                         {{ answer }}
                     </p>
                     <div v-if="answerGenerating" class="spinner-border mt-5"></div>
                 </div>
                 <div class="modal-footer">
-                    <input id="question" v-model="question" type="text" class="form-control col"
+                    <input id="question" type="text" class="form-control col"
                         placeholder="Type your message here">
                     <button type="button" @click="askQuestion()" class="btn btn-primary col-4">Send Message</button>
                 </div>

@@ -35,17 +35,19 @@ body {
     box-shadow: 5px 5px #FE0000;
 }
 
-.modal-dialog {
+.modal-content {
+    height: 600px;
     position: absolute;
     bottom: 100px;
-    right: 50px;
-    width:25%;
-}
-
-.modal-content {
-    height: 500px;
 }
 
 .modal-backdrop {
     background-color: transparent;
+}
+
+.modal-dialog {
+    position: absolute;
+    width: 25%;
+    right: 75px;
+    bottom: 0px;
 }
