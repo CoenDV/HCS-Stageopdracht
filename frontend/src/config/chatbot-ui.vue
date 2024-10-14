@@ -22,7 +22,7 @@ export default {
             )
                 .then(response => {
                     console.log(response.data);
-                    this.answer = response.data.response[0].message.content;
+                    this.answer = response.data.response;
                     this.answerGenerating = false;
                 })
                 .catch(error => {

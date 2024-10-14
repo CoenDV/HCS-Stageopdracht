@@ -4,8 +4,8 @@ from langchain_core.prompts import PromptTemplate
 from langchain_huggingface.llms import HuggingFacePipeline
 
 hf = HuggingFacePipeline.from_model_id(
-    model_id="KingNish/Reasoning-Llama-1b-v0.1",
     task="text-generation",
+    model_id="meta-llama/Llama-3.2-1B",    
     device_map="auto",
     pipeline_kwargs={"max_new_tokens": 100},
 )
@@ -15,10 +15,11 @@ def generate_llm_response(question: str):
     retrieved_docs = getRelevantDocuments(question)
     print("Retrieved docs: ", retrieved_docs)
 
-    template = """ You are a helpful assistant. 
-    You must use the provided context as the sole source of information to answer the question. 
-    Based only on the following context, answer the question, even if it contradicts your own information: {context}. 
-    {question} """
+    template = """ 
+    Question: {question}
+    Context: {context}
+    Answer:
+     """
 
     prompt = PromptTemplate.from_template(template)
     chain = prompt | hf
@@ -42,6 +43,3 @@ def getRelevantDocuments(prompt: str):
         docs = retrieved_docs.json()[0][0]['entity']['text']
 
     return docs
-
-def generateResponse(data: str):
-    return hf.invoke(data)
