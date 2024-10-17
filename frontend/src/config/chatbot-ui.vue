@@ -29,6 +29,8 @@ export default {
                 })
                 .catch(error => {
                     console.log(error);
+                    this.answer = 'Sorry, something went wrong. Please try again later.';
+                    this.answerGenerating = false;
                 });
         }
     }
