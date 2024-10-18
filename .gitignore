@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 *.meta
 /vectordb/volumes/*
+/models/*

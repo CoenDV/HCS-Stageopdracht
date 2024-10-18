@@ -3,3 +3,4 @@ accelerate
 faiss-cpu
 fastapi
 uvicorn
+llama-cpp-python

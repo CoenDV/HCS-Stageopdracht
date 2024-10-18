@@ -1,55 +1,54 @@
 import requests
-import json
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
-from langchain_huggingface.llms import HuggingFacePipeline
+from langchain_community.llms import LlamaCpp
 
-system_prompt = SystemMessagePromptTemplate.from_template(
-    "You are a helpful assistant for a car insurance company."
-    "Use the provided context to answer the question. If you don't know the answer, say you don't know."
-    "Keep the answer concise with a maximum of 5 sentences."
-    "Answer the question based on the context: {context}."
-)
+class HCSInsuranceAssistant:
+    def __init__(self, model_path: str):
+        self.system_prompt = SystemMessagePromptTemplate.from_template(
+            "You are a helpful assistant for HCS-Company car insurance. "
+            "Use the provided context to answer the question. "
+            "Keep the answer concise with a maximum of 5 sentences. "
+            "Answer the question based on the context: {context}. "
+            "If you are greeted, respond with a greeting. "
+        )
 
-human_prompt = HumanMessagePromptTemplate.from_template(
-    "Answer the following question: {question} Answer: "
-)
+        self.human_prompt = HumanMessagePromptTemplate.from_template(
+            "{question} Answer: "
+        )
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        system_prompt, 
-        human_prompt
-    ]
-)
+        self.prompt = ChatPromptTemplate.from_messages(
+            [
+                self.system_prompt, 
+                self.human_prompt
+            ]
+        )
 
-hf = HuggingFacePipeline.from_model_id(
-    task="text-generation",
-    # model_id="meta-llama/Llama-3.2-1B",  
-    model_id="meta-llama/Llama-3.2-3B",
-    device_map="auto",
-    pipeline_kwargs={"max_new_tokens": 50, "temperature": 0.1}
-)
+        self.llm = LlamaCpp(
+            model_path=model_path,
+            max_tokens=150,
+            temperature=0.4
+        )
 
-chain = prompt | hf
+        self.chain = self.prompt | self.llm
 
-def generate_llm_response(question: str):
+    def generate_response(self, question: str) -> str:
+        retrieved_docs = self.get_relevant_documents(question)
 
-    retrieved_docs = getRelevantDocuments(question)
-    
-    response = chain.invoke({"context": retrieved_docs, "question": question})
-    print(json.dumps(response, indent=4))
+        # Prepare input for the chain
+        response = self.chain.invoke({
+            "context": retrieved_docs,
+            "question": question
+        })
+        print(response)
 
-    return formatResponse(response)
+        return response
 
-### Helper methods ###
+    def get_relevant_documents(self, prompt: str):
+        retrieved_docs = requests.post(
+            "https://milvus-api-v3-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
+            json={"query": prompt}
+        )
 
-def getRelevantDocuments(prompt: str):
-    retrieved_docs = requests.post(
-        "https://milvus-api-v3-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
-        json={"query": prompt}
-    )
-
-    if retrieved_docs.json() != [[]]:
-        return retrieved_docs.json()[0][0]['entity']['text']
-
-def formatResponse(response):
-    return response.split("Answer: ")[1].strip()
+        if retrieved_docs.json() != [[]]:
+            return retrieved_docs.json()[0][0]['entity']['text']
+        return ""
