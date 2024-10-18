@@ -1,6 +1,5 @@
 langchain_huggingface
 accelerate
-faiss-cpu
 fastapi
 uvicorn
 llama-cpp-python
