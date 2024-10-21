@@ -5,31 +5,40 @@ export default {
     name: "ChatbotUi",
     data() {
         return {
-            question: '',
-            answer: '',
-            answerGenerating: false
+            temporary_question: '',
+            answerGenerating: false,
+
+            messageHistory: []
         }
     },
     methods: {
         askQuestion() {
             this.answerGenerating = true;
-            this.question = document.getElementById('question').value;
-            this.answer = '';
+            this.temporary_question = document.getElementById('question').value;
             document.getElementById('question').value = '';
 
             axios.post("https://saved-ferret-rapid.ngrok-free.app/generate/",
                 {
-                    "prompt": this.question
+                    "prompt": this.temporary_question
                 }
             )
                 .then(response => {
-                    console.log(response.data);
-                    this.answer = response.data.response;
                     this.answerGenerating = false;
+
+                    const result = response.data.response;
+                    console.log(result);
+
+                    this.messageHistory.push({
+                        question: result.question,
+                        answer: result.answer
+                    });
                 })
                 .catch(error => {
                     console.log(error);
-                    this.answer = 'Sorry, something went wrong. Please try again later.';
+                    this.messageHistory.push({
+                        question: this.temporary_question,
+                        answer: result.answer
+                    });
                     this.answerGenerating = false;
                 });
         }
@@ -50,19 +59,26 @@ export default {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="col-10 text-center">Welkom bij de HCS-Chatbot. Hoe kan ik u helpen?</p>
-                    <p v-if="question != ''" class="row col-10 p-2 bg-primary rounded float-end">
-                        {{ question }}
-                    </p>
+                    <p class="col-10">Welkom bij de HCS-Chatbot. Hoe kan ik u helpen?</p>
 
-                    <p v-if="answer != ''" class="row col-10 p-2 bg-secondary-subtle rounded">
-                        {{ answer }}
-                    </p>
-                    <div v-if="answerGenerating" class="spinner-border mt-5"></div>
+                    <div v-for="message in messageHistory">
+                        <p class="row col-10 p-2 bg-primary rounded float-end">
+                            {{ message.question }}
+                        </p>
+
+                        <p class="row col-10 p-2 bg-secondary-subtle rounded">
+                            {{ message.answer }}
+                        </p>
+                    </div>
+                    <div v-if="answerGenerating">
+                        <p class="row col-10 p-2 bg-primary rounded float-end">
+                            {{ temporary_question }}
+                        </p>
+                        <div class="spinner-border mt-5"></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <input id="question" type="text" class="form-control col"
-                        placeholder="Type your message here">
+                    <input id="question" type="text" class="form-control col" placeholder="Type your message here">
                     <button type="button" @click="askQuestion()" class="btn btn-primary col-4">Send Message</button>
                 </div>
             </div>
