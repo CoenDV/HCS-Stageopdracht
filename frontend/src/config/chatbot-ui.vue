@@ -59,7 +59,7 @@ export default {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="col-10">Welkom bij de HCS-Chatbot. Hoe kan ik u helpen?</p>
+                    <p class="row col-10 p-2 bg-secondary-subtle rounded">Welkom bij de HCS-Chatbot. Hoe kan ik u helpen?</p>
 
                     <div v-for="message in messageHistory">
                         <p class="row col-10 p-2 bg-primary rounded float-end">

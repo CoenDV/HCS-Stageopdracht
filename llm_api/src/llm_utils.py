@@ -8,8 +8,10 @@ class HCSInsuranceAssistant:
     def __init__(self, model_path: str):
         # System prompt
         self.system_prompt = SystemMessagePromptTemplate.from_template(
-            "You are a helpful assistant for HCS-Company car insurance. Use the provided context to answer the question, if you don't know the answer, say so. "
-            "Keep the answer concise with a maximum of 5 sentences. Answer the question based on the context: {context}. "
+            "You are a helpful assistant for HCS-Company car insurance. "
+            "Use the provided context to answer the question, if you don't know the answer, say so. "
+            "Keep the answer concise with a maximum of 5 sentences. "
+            "Answer the question based on the context: {context}. "
             "If you are greeted, respond with a greeting. "
         )
 
