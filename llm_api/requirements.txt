@@ -1,5 +1,7 @@
 langchain_huggingface
+langchain_community
 accelerate
 fastapi
-uvicorn
 llama-cpp-python
+requests
+uvicorn

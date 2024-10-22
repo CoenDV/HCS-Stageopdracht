@@ -12,6 +12,9 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy the GGUF file from the model directory into the container
+COPY model/*.gguf /app/model/
+
 # Set the working directory in the container
 WORKDIR /app
 
