@@ -50,7 +50,7 @@ class InsurancePolicy(db.Model):
         }
 
 class Car(db.Model):
-    licensePlate = db.Column(db.String(8), primary_key=True)
+    licenseplate = db.Column(db.String(8), primary_key=True)
     brand = db.Column(db.String(50), nullable=False)
     model = db.Column(db.String(50), nullable=False)
     year = db.Column(db.Integer, nullable=False)
@@ -62,7 +62,7 @@ class Car(db.Model):
     
     def to_dict(self):
         return {
-            "licensePlate": self.licensePlate,
+            "licenseplate": self.licenseplate,
             "brand": self.brand,
             "model": self.model,
             "year": self.year,

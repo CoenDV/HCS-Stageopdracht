@@ -2,6 +2,7 @@ from flask import Flask
 from config import Config
 from models import db
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 from controllers.customercontroller import customer_bp
 from controllers.carcontroller import car_bp
@@ -11,6 +12,9 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 migrate = Migrate(app, db)
+
+# Allow CORS for all domains on all routes
+CORS(app)
 
 app.register_blueprint(customer_bp)
 app.register_blueprint(car_bp)

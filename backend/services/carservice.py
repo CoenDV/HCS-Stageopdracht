@@ -7,7 +7,7 @@ class CarService:
 
     def create_car(data):
         car = Car(
-            licensePlate=data['licensePlate'],
+            licenseplate=data['licenseplate'],
             brand=data['brand'],
             model=data['model'],
             year=data['year'],
@@ -22,3 +22,7 @@ class CarService:
     def delete_car(id):
         car = CarRepository.get_by_id(id)
         return CarRepository.delete(car)
+    
+    def get_cars_from_customer(username):
+        cars = CarRepository.get_cars_from_customer(username)
+        return cars

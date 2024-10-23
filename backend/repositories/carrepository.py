@@ -1,4 +1,4 @@
-from models import Car, db
+from models import Car, InsurancePolicy, Customer, db
 
 class CarRepository:
     def get_all():
@@ -16,3 +16,6 @@ class CarRepository:
         db.session.delete(car)
         db.session.commit()
         return car
+    
+    def get_cars_from_customer(username):
+        return db.session.query(Car).join(InsurancePolicy, Car.insurancepolicy_id == InsurancePolicy.id).join(Customer, InsurancePolicy.customer_id == Customer.id).all()

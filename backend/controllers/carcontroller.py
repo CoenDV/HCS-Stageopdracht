@@ -20,3 +20,8 @@ def get_car_by_id(id):
     if car is None:
         return jsonify({'error': 'Car not found'}), 404
     return jsonify(car.to_dict()), 200
+
+@car_bp.route('/customer/cars/<string:username>', methods=['GET'])
+def get_cars_from_customer(username):
+    cars = CarService.get_cars_from_customer(username)
+    return jsonify([car.to_dict() for car in cars])

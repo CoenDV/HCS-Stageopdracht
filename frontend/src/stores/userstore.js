@@ -1,27 +1,30 @@
+import { defineStore } from 'pinia'
 import axios from './../config/axios-auth'
 
 export const userStore = defineStore('store', {
     state: () => ({
-        user: '',
         username: ''
     }),
     getters: {
-        isLoggedIn: (state) => state.user !== null,
+        isLoggedIn: (state) => state.username !== '',
     },
     actions: {
-        login(username) {
+        login(username, password) {
             return new Promise((resolve, reject) => {
+                this.user = {
+                    username: username,
+                    password: password
+                }
                 axios
-                    .post("/login", { username: username })
+                    .post("customers/login", this.user)
                     .then(response => {
-                        this.username = username
-                        if (response.data.username == this.username) {
-                            this.user = response.data
-                            resolve();
-                            localStorage.setItem("user", JSON.stringify(this.user))
-                        }
-                        else {
-                            reject("Invalid username")
+
+                        this.username = response.data.username;
+                        resolve();
+
+                        if (this.user != "") {
+                            localStorage.setItem("username", JSON.stringify(this.username))
+                            localStorage.setItem("user", JSON.stringify(response.data))
                         }
                     })
                     .catch((error) => reject(error));
@@ -29,11 +32,16 @@ export const userStore = defineStore('store', {
             )
         },
         autoLogin() {
-            const user = localStorage.getItem("user")
+            const username = localStorage.getItem("username")
 
-            if (user) {
-                this.user = JSON.parse(user);
+            if (username) {
+                this.username = JSON.parse(username)
             }
+        },
+        logout() {
+            this.username = '';
+            localStorage.removeItem("username");
+            localStorage.removeItem("user");
         }
     },
 }

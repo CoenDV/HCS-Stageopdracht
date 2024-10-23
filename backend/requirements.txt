@@ -1,4 +1,5 @@
 Flask
 Flask-SQLAlchemy
-psycopg2-binary
 Flask-Migrate
+Flask-Cors
+psycopg2-binary

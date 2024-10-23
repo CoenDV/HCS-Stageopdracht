@@ -1,12 +1,9 @@
 <script>
 export default {
     name: "AccountInfo",
-    setup() {
-
-    },
     data() {
         return {
-
+            user: JSON.parse(localStorage.getItem('user')),
         }
     }
 };
@@ -20,21 +17,17 @@ export default {
             <div class="row">
                 <div class="col mb-3">
                     <label for="gebruikersnaam" class="form-label">Gebruikersnaam: </label>
-                    <input type="text" class="form-control" id="gebruikesnaam">
-                </div>
-                <div class="col mb-3">
-                    <label for="wachtwoord" class="form-label">Wachtwoord: </label>
-                    <input type="password" class="form-control" id="wachtwoord">
+                    <input type="text" class="form-control" id="gebruikesnaam" :value="user.username">
                 </div>
             </div>
             <div class="row">
                 <div class="col mb-3">
                     <label for="voornaam" class="form-label">Voornaam: </label>
-                    <input type="text" class="form-control" id="voornaam">
+                    <input type="text" class="form-control" id="voornaam" :value="user.firstname">
                 </div>
                 <div class="col mb-3">
                     <label for="achternaam" class="form-label">Achternaam: </label>
-                    <input type="text" class="form-control" id="achternaam">
+                    <input type="text" class="form-control" id="achternaam" :value="user.lastname">
                 </div>
             </div>
         </div>

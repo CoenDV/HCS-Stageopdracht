@@ -4,6 +4,8 @@ import AccountInfo from './AccountInfo.vue';
 import ActiveInsurance from './ActiveInsurance.vue';
 import CarInfo from './CarInfo.vue';
 
+import axios from './../../config/axios-auth';
+
 export default {
     name: "AvailableDocuments",
     components: {
@@ -12,16 +14,27 @@ export default {
         ActiveInsurance,
         ChatbotUi
     },
-    setup() {
-
-    },
     data() {
         return {
-            
+            user: JSON.parse(localStorage.getItem('user')),
+            cars: []
         }
     },
+    mounted() {
+        console.log(this.user);
+        this.cars = this.getCarsFromUser();
+    },
     methods: {
-        
+        getCarsFromUser() {
+            axios.get("/customer/cars/" + this.user.username)
+                .then(response => {
+                    console.log(response.data);
+                    this.cars = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
     }
 };
 </script>
@@ -36,8 +49,7 @@ export default {
             <div class="col-4">
                 <AccountInfo />
 
-                <CarInfo />
-                <CarInfo />
+                <CarInfo v-for="car in cars" v-bind:car="car" />
             </div>
 
             <div class="col-8">
