@@ -36,7 +36,7 @@ class HCSInsuranceAssistant:
         self.llm = LlamaCpp(
             model_path=model_path,
             max_tokens=150,         # max tokens: the maximum number of tokens that the model can generate
-            n_ctx=2048,             # context length: desites the maximum number of tokens that can be processed by the model
+            n_ctx=2048,             # context length: decides the maximum number of tokens that can be processed by the model
             temperature=0.4         # temperature: controls the creativity of the model
         )
 
