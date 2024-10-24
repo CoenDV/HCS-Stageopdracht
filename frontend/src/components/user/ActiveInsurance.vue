@@ -1,72 +1,54 @@
 <script>
 export default {
     name: "ActiveInsurance",
-    setup() {
-
-    },
-    data() {
-        return {
-
+    props: {
+        insurance: {
+            type: Object,
+            required: true
         }
+    },
+    mounted() {
+        console.log(this.insurance);
     }
 };
 </script>
 
 <template>
-    <div class="accordion col-11 mt-5" id="accordionPanelsStayOpenExample">
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
-                    aria-controls="panelsStayOpen-collapseOne">
-                    Accordion Item #1
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
-                <div class="accordion-body">
-                    <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse
-                    plugin adds the appropriate classes that we use to style each element. These classes control the
-                    overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of
-                    this with custom CSS or overriding our default variables. It's also worth noting that just about any
-                    HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                :data-bs-target="'#panelsStayOpen-' + insurance.id" aria-expanded="false"
+                :aria-controls="'panelsStayOpen-' + insurance.id">
+                <h5 class="card-title">{{ insurance.id }}. {{ insurance.title }}</h5>
+            </button>
+        </h2>
+        <div :id="'panelsStayOpen-' + insurance.id" class="accordion-collapse collapse">
+            <div class="accordion-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="insurance" class="form-label">Insurance: </label>
+                        <input type="text" class="form-control" id="insurance" :value="insurance.title">
+                    </div>
+                    <div class="col mb-3">
+                        <label for="insuranceType" class="form-label">Insurance Type: </label>
+                        <input type="text" class="form-control" id="insuranceType" :value="insurance.insuranceType">
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
-                    aria-controls="panelsStayOpen-collapseTwo">
-                    Accordion Item #2
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                <div class="accordion-body">
-                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the
-                    collapse plugin adds the appropriate classes that we use to style each element. These classes
-                    control the overall appearance, as well as the showing and hiding via CSS transitions. You can
-                    modify any of this with custom CSS or overriding our default variables. It's also worth noting that
-                    just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit
-                    overflow.
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="insurance" class="form-label">Start date: </label>
+                        <input type="text" class="form-control" id="insurance" :value="insurance.dateStart">
+                    </div>
+                    <div class="col mb-3">
+                        <label for="insuranceType" class="form-label">Price per month: </label>
+                        <input type="text" class="form-control" id="insuranceType" :value="insurance.pricePerMonth">
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
-                    aria-controls="panelsStayOpen-collapseThree">
-                    Accordion Item #3
-                </button>
-            </h2>
-            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-                <div class="accordion-body">
-                    <strong>This is the third item's accordion body.</strong> It is hidden by default, until the
-                    collapse plugin adds the appropriate classes that we use to style each element. These classes
-                    control the overall appearance, as well as the showing and hiding via CSS transitions. You can
-                    modify any of this with custom CSS or overriding our default variables. It's also worth noting that
-                    just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit
-                    overflow.
+                <div class="col mb-3">
+                    <label for="summary" class="form-label">Summary: </label>
+                    <textarea type="text" class="form-control" id="insuranceCompany" rows="3    ">
+                        {{ insurance.summary }}
+                    </textarea>
                 </div>
             </div>
         </div>

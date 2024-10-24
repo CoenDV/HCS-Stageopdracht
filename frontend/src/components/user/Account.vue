@@ -17,12 +17,14 @@ export default {
     data() {
         return {
             user: JSON.parse(localStorage.getItem('user')),
-            cars: []
+            cars: [],
+            insurances: []
         }
     },
     mounted() {
         console.log(this.user);
         this.cars = this.getCarsFromUser();
+        this.insurances = this.getInsurancesFromUser();
     },
     methods: {
         getCarsFromUser() {
@@ -30,6 +32,16 @@ export default {
                 .then(response => {
                     console.log(response.data);
                     this.cars = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+        getInsurancesFromUser() {
+            axios.get("/insurance_policies/customer/" + this.user.id)
+                .then(response => {
+                    console.log(response.data);
+                    this.insurances = response.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -53,7 +65,9 @@ export default {
             </div>
 
             <div class="col-8">
-                <ActiveInsurance />
+                <div class="accordion col-11 mt-5" id="accordionPanelsStayOpenExample">
+                    <ActiveInsurance v-for="insurance in insurances" v-bind:insurance="insurance" />
+                </div>
             </div>
         </div>
     </div>

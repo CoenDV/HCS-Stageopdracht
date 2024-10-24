@@ -20,3 +20,8 @@ def get_insurance_policy_by_id(id):
     if insurance_policy is None:
         return jsonify({'error': 'Insurance policy not found'}), 404
     return jsonify(insurance_policy.to_dict()), 200
+
+@insurance_bp.route('/insurance_policies/customer/<int:customer_id>', methods=['GET'])
+def get_insurance_policies_by_customer_id(customer_id):
+    insurance_policies = InsuranceService.get_insurance_policies_by_customer_id(customer_id)
+    return jsonify([insurance_policy.to_dict() for insurance_policy in insurance_policies])

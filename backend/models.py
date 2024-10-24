@@ -29,11 +29,12 @@ class Customer(db.Model):
 
 class InsurancePolicy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
+    title = db.Column(db.String(50), nullable=False)
     dateStart = db.Column(db.Date, nullable=False)
     pricePerMonth = db.Column(db.Float, nullable=False)  # Changed Double to Float
     insuranceType = db.Column(db.Enum(InsuranceType), nullable=False)  # Enum reference
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    summary = db.Column(db.String(1024), nullable=True)
     car = db.relationship('Car', backref='insurancePolicy', lazy=True)
 
     def __repr__(self):
@@ -46,6 +47,7 @@ class InsurancePolicy(db.Model):
             "dateStart": self.dateStart.isoformat(),
             "pricePerMonth": self.pricePerMonth,
             "insuranceType": self.insuranceType.name,
+            "summary": self.summary,
             "customer_id": self.customer_id
         }
 

@@ -18,6 +18,9 @@ class InsuranceService:
 
     def get_insurance_policy_by_id(id):
         return InsuranceRepository.get_by_id(id)
+    
+    def get_insurance_policies_by_customer_id(customer_id):
+        return InsuranceRepository.get_by_customer_id(customer_id)
 
     def delete_insurance_policy(id):
         insurance_policy = InsuranceRepository.get_by_id(id)
