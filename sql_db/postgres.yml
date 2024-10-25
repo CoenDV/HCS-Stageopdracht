@@ -1,0 +1,140 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    app.openshift.io/route-disabled: 'false'
+    deployment.kubernetes.io/revision: '1'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"postgresql:latest","namespace":"openshift"},"fieldPath":"spec.template.spec.containers[?(@.name==\"postgresql\")].image","paused":"false"}]'
+    openshift.io/generated-by: OpenShiftWebConsole
+  resourceVersion: '2639836735'
+  name: postgresql
+  uid: 88859467-9e31-4c40-badc-a8a85d1c516b
+  creationTimestamp: '2024-10-24T14:55:50Z'
+  generation: 3
+  namespace: coen-de-vries-dev
+  labels:
+    app: postgresql
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/name: postgresql
+    app.openshift.io/runtime: postgresql
+    app.openshift.io/runtime-namespace: openshift
+    app.openshift.io/runtime-version: latest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: postgresql
+        deployment: postgresql
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+    spec:
+      containers:
+        - name: postgresql
+          image: 'registry.redhat.io/rhel8/postgresql-15@sha256:aaf4d9767040dfd9586c48930c1e5b164f0e611361f951933f99149a8d9b3fe0'
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: POSTGRESQL_USER
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: POSTGRESQL_PASSWORD
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: POSTGRESQL_DATABASE
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /var/lib/pgsql/data
+              name: postgresql-storage
+      volumes:
+        - name: postgresql-storage
+          persistentVolumeClaim:
+            claimName: postgresql-pvc
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+status:
+  observedGeneration: 3
+  replicas: 1
+  updatedReplicas: 1
+  readyReplicas: 1
+  availableReplicas: 1
+  conditions:
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2024-10-24T14:55:52Z'
+      lastTransitionTime: '2024-10-24T14:55:50Z'
+      reason: NewReplicaSetAvailable
+      message: ReplicaSet "postgresql-6cdb99cf9d" has successfully progressed.
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2024-10-25T05:58:11Z'
+      lastTransitionTime: '2024-10-25T05:58:11Z'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgresql-pvc
+  namespace: coen-de-vries-dev
+  annotations:
+    volume.beta.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+    volume.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+  finalizers:
+    - kubernetes.io/pvc-protection
+spec:
+  accessModes:
+    - ReadWriteOnce  # PostgreSQL needs ReadWriteOnce for single node access
+  resources:
+    requests:
+      storage: 1Gi  # Adjust this based on your storage needs
+  storageClassName: gp3  # The storage class used in AWS EBS, can be changed if necessary
+  volumeMode: Filesystem
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgresql
+  namespace: coen-de-vries-dev
+  labels:
+    app: postgresql
+spec:
+  ports:
+    - port: 5432  # Default PostgreSQL port
+      targetPort: 5432  # Port inside the container
+      protocol: TCP
+  selector:
+    app: postgresql  # Matches the pod label to route traffic
+  type: ClusterIP  # Internal service, change to LoadBalancer or NodePort if external access is needed

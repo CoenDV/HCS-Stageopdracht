@@ -9,8 +9,8 @@ class CarRepository:
         db.session.commit()
         return car
 
-    def get_by_id(id):
-        return Car.query.get(id)
+    def get_by_licenseplate(licenseplate):
+        return Car.query.get(licenseplate)
 
     def delete(car):
         db.session.delete(car)

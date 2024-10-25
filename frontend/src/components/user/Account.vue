@@ -23,22 +23,11 @@ export default {
     },
     mounted() {
         console.log(this.user);
-        this.cars = this.getCarsFromUser();
         this.insurances = this.getInsurancesFromUser();
     },
     methods: {
-        getCarsFromUser() {
-            axios.get("/customer/cars/" + this.user.username)
-                .then(response => {
-                    console.log(response.data);
-                    this.cars = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
         getInsurancesFromUser() {
-            axios.get("/insurance_policies/customer/" + this.user.id)
+            axios.get("/customer_policies/" + this.user.id)
                 .then(response => {
                     console.log(response.data);
                     this.insurances = response.data;
@@ -61,7 +50,7 @@ export default {
             <div class="col-4">
                 <AccountInfo />
 
-                <CarInfo v-for="car in cars" v-bind:car="car" />
+                <CarInfo v-for="insurance in insurances" v-bind:car="insurance.car" />
             </div>
 
             <div class="col-8">

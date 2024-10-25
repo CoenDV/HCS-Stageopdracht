@@ -17,17 +17,17 @@ export default {
             <div class="row">
                 <div class="col mb-3">
                     <label for="gebruikersnaam" class="form-label">Gebruikersnaam: </label>
-                    <input type="text" class="form-control" id="gebruikesnaam" :value="user.username">
+                    <input type="text" class="form-control" id="gebruikesnaam" :value="user.username" disabled>
                 </div>
             </div>
             <div class="row">
                 <div class="col mb-3">
                     <label for="voornaam" class="form-label">Voornaam: </label>
-                    <input type="text" class="form-control" id="voornaam" :value="user.firstname">
+                    <input type="text" class="form-control" id="voornaam" :value="user.firstname" disabled>
                 </div>
                 <div class="col mb-3">
                     <label for="achternaam" class="form-label">Achternaam: </label>
-                    <input type="text" class="form-control" id="achternaam" :value="user.lastname">
+                    <input type="text" class="form-control" id="achternaam" :value="user.lastname" disabled>
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@ class Customer(db.Model):
     lastname = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(50), unique=True, nullable=False)
-    policies = db.relationship('InsurancePolicy', backref='customer', lazy=True)
+    policies = db.relationship('CustomerPolicy', backref='customer', lazy=True)
 
     def __repr__(self):
         return f'<Customer {self.username}>'
@@ -27,16 +27,44 @@ class Customer(db.Model):
             "username": self.username
         }
 
+class CustomerPolicy(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    dateStart = db.Column(db.Date, nullable=False)
+    pricePerMonth = db.Column(db.Float, nullable=False) 
+    
+    car_licenseplate = db.Column(db.String(8), db.ForeignKey('car.licenseplate'), nullable=False)
+    insurancepolicy_id = db.Column(db.Integer, db.ForeignKey('insurance_policy.id'), nullable=False)
+    
+    # Relationship to Car using the 'car_licenseplate' foreign key
+    car = db.relationship('Car', backref='customer_policies', lazy=True)
+    
+    # Relationship to InsurancePolicy using the 'insurancepolicy_id' foreign key
+    insurancepolicy = db.relationship('InsurancePolicy', backref='customer_policies', lazy=True)
+
+    def __repr__(self):
+        return f'<CustomerPolicy {self.customer_id} {self.insurancepolicy_id}>'
+    
+    def to_dict(self):
+        # Include the related InsurancePolicy and Car objects
+        car_dict = self.car.to_dict() if self.car else None
+        insurance_policy_dict = self.insurancepolicy.to_dict() if self.insurancepolicy else None
+        
+        return {
+            "id": self.id,
+            "customer_id": self.customer_id,
+            "insurance_policy": insurance_policy_dict,
+            "car": car_dict,
+            "dateStart": self.dateStart,
+            "pricePerMonth": self.pricePerMonth
+        }
+
 class InsurancePolicy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
-    dateStart = db.Column(db.Date, nullable=False)
-    pricePerMonth = db.Column(db.Float, nullable=False)  # Changed Double to Float
-    insuranceType = db.Column(db.Enum(InsuranceType), nullable=False)  # Enum reference
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    insuranceType = db.Column(db.Enum(InsuranceType), nullable=False)
     summary = db.Column(db.String(1024), nullable=True)
-    car = db.relationship('Car', backref='insurancePolicy', lazy=True)
-
+    
     def __repr__(self):
         return f'<InsurancePolicy {self.title}>'
     
@@ -44,11 +72,8 @@ class InsurancePolicy(db.Model):
         return {
             "id": self.id,
             "title": self.title,
-            "dateStart": self.dateStart.isoformat(),
-            "pricePerMonth": self.pricePerMonth,
             "insuranceType": self.insuranceType.name,
-            "summary": self.summary,
-            "customer_id": self.customer_id
+            "summary": self.summary
         }
 
 class Car(db.Model):
@@ -56,9 +81,9 @@ class Car(db.Model):
     brand = db.Column(db.String(50), nullable=False)
     model = db.Column(db.String(50), nullable=False)
     year = db.Column(db.Integer, nullable=False)
-    currentValue = db.Column(db.Float, nullable=False)  # Changed Double to Float
-    insurancepolicy_id = db.Column(db.Integer, db.ForeignKey('insurance_policy.id'))  # Add ForeignKey
+    currentValue = db.Column(db.Float, nullable=False)
 
+    # Backref 'customer_policies' is already created by the relationship in CustomerPolicy
     def __repr__(self):
         return f'<Car {self.brand} {self.model}>'
     
@@ -69,5 +94,4 @@ class Car(db.Model):
             "model": self.model,
             "year": self.year,
             "currentValue": self.currentValue,
-            "insurancepolicy_id": self.insurancepolicy_id
         }

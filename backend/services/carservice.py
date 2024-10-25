@@ -12,15 +12,15 @@ class CarService:
             model=data['model'],
             year=data['year'],
             currentValue=data['currentValue'],
-            insurancepolicy_id=data['insurancepolicy_id']
         )
         return CarRepository.save(car)
 
     def get_car_by_id(id):
         return CarRepository.get_by_id(id)
 
-    def delete_car(id):
-        car = CarRepository.get_by_id(id)
+    def delete_car(licenseplate):
+        car = CarRepository.get_by_licenseplate(licenseplate)
+        print(car)
         return CarRepository.delete(car)
     
     def get_cars_from_customer(username):

@@ -23,7 +23,7 @@ export default {
                         router.push('/dashboard');
                 })
                 .catch(error => {
-                    this.errorMessage = error.response.data.error;
+                    this.errorMessage = error.response;
                 });
         }
     }

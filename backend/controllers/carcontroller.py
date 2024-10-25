@@ -25,3 +25,8 @@ def get_car_by_id(id):
 def get_cars_from_customer(username):
     cars = CarService.get_cars_from_customer(username)
     return jsonify([car.to_dict() for car in cars])
+
+@car_bp.route('/cars/<string:licenseplate>', methods=['DELETE'])
+def delete_car(licenseplate):
+    car = CarService.delete_car(licenseplate)
+    return jsonify(car.to_dict()), 200
