@@ -3,3 +3,4 @@ uvicorn
 pymilvus
 pydantic
 glob2
+minio
