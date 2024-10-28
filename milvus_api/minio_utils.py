@@ -1,4 +1,5 @@
 from minio import Minio
+from models import Document
 import glob
 import os
 
@@ -37,10 +38,16 @@ class minio_utils:
 
     
     def get_documents(self):
-        documents = self.minio_client.list_objects(self.bucket_name)
+        objects = self.minio_client.list_objects(self.bucket_name)
 
         response = []
-        for document in documents:
-            response.append(self.minio_client.get_object(self.bucket_name, document.object_name).data.decode("utf-8"))
+        for object in objects:
+            print(object)
+            response.append(Document(
+                object.etag,
+                object.object_name,
+                self.minio_client.get_object(self.bucket_name, object.object_name).data.decode("utf-8")
+            ))
 
+        print(response)
         return response

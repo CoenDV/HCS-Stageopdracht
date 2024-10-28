@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify
+import requests
 from services.insuranceservice import InsuranceService
 
 insurance_bp = Blueprint('insurance_bp', __name__)
 
+### INIT CUSTOMER POLICIES ###
 @insurance_bp.route('/customer_policies', methods=['POST'])
 def create_customer_policy():
     data = request.get_json()
@@ -14,7 +16,11 @@ def get_customer_policies_from_customerid(id):
     customer_policies = InsuranceService.get_customer_policies_from_customerid(id)
     return jsonify([customer_policy.to_dict() for customer_policy in customer_policies])
 
-
+### INIT DOCUMENTS ###
+@insurance_bp.route('/documents', methods=['GET'])
+def get_documents():
+    response = requests.get("https://milvus-api-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/documents/")
+    return response.json()
 
 ### INIT INSURANCE POLICIES ###
 @insurance_bp.route('/insurance_policies', methods=['POST'])

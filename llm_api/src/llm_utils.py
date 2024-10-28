@@ -64,7 +64,7 @@ class HCSInsuranceAssistant:
 
     def get_relevant_documents(self, prompt: str):
         retrieved_docs = requests.post(
-            "https://milvus-api-v3-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
+            "https://milvus-api-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
             json={"query": prompt}
         )
 
