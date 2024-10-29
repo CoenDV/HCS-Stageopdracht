@@ -59,19 +59,19 @@ export default {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="row col-10 p-2 bg-secondary-subtle rounded">Welkom bij de HCS-Chatbot. Hoe kan ik u helpen?</p>
+                    <p class="row col-10 p-2 messageBot rounded">Welkom bij de HCS-Chatbot. Hoe kan ik u helpen?</p>
 
                     <div v-for="message in messageHistory">
-                        <p class="row col-10 p-2 bg-primary rounded float-end">
+                        <p class="row col-10 p-2 messageUser rounded float-end">
                             {{ message.question }}
                         </p>
 
-                        <p class="row col-10 p-2 bg-secondary-subtle rounded">
+                        <p class="row col-10 p-2 messageBot rounded">
                             {{ message.answer }}
                         </p>
                     </div>
                     <div v-if="answerGenerating">
-                        <p class="row col-10 p-2 bg-primary rounded float-end">
+                        <p class="row col-10 p-2 messageUser rounded float-end">
                             {{ temporary_question }}
                         </p>
                         <div class="spinner-border mt-5"></div>
@@ -86,4 +86,14 @@ export default {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.messageUser {
+    background-color: #FE0000;
+    color: #FFF;
+}
+
+.messageBot {
+    background-color: #000;
+    color: #FFF;
+}
+</style>
