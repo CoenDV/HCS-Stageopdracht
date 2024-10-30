@@ -22,6 +22,10 @@ class PromptRequest(BaseModel):
 async def generate_text(request: PromptRequest):
     return {"response": assistant.generate_response(request.prompt)}
 
+@app.post("/generate-without-context/")
+async def generate_text_without_context(request: PromptRequest):
+    return {"response": assistant.generate_response_without_context(request.prompt)}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="localhost", port=8080)

@@ -15,6 +15,12 @@ class HCSInsuranceAssistant:
             "If you are greeted, respond with a greeting. "
         )
 
+        self.system_prompt_without_RAG = SystemMessagePromptTemplate.from_template(
+            "You are a helpful assistant for HCS-Company car insurance. "
+            "Keep the answer concise with a maximum of 5 sentences. "
+            "If you are greeted, respond with a greeting. "
+        )
+
         # Chat history
         self.chat_history = InMemoryChatMessageHistory()
 
@@ -32,16 +38,26 @@ class HCSInsuranceAssistant:
             ]
         )
 
+        self.prompt_without_RAG = ChatPromptTemplate.from_messages(
+            [
+                self.system_prompt_without_RAG,
+                self.human_prompt
+            ]
+        )
+
         # AI Model
         self.llm = LlamaCpp(
             model_path=model_path,
             max_tokens=150,         # max tokens: the maximum number of tokens that the model can generate
             n_ctx=2048,             # context length: decides the maximum number of tokens that can be processed by the model
-            temperature=0.4         # temperature: controls the creativity of the model
+            temperature=0.4,        # temperature: controls the creativity of the model
+            n_gpu_layers= 1024,     # number of layers the GPU uses
+            n_batch=128,              # batch size: the number of samples that the model processes at once
         )
 
         # Chain
         self.chain = self.prompt | self.llm
+        self.chain_without_RAG = self.prompt_without_RAG | self.llm
 
         # Chain with message history
         self.chain_with_message_history = RunnableWithMessageHistory(
@@ -54,13 +70,16 @@ class HCSInsuranceAssistant:
     def generate_response(self, question: str) -> str:
         retrieved_docs = self.get_relevant_documents(question)
 
+        response_without_context = self.chain_without_RAG.invoke(input = { "question": question } )
         response = self.chain_with_message_history.invoke(
             { "context": retrieved_docs, "question": question },
             config= { "session_id": "1" }
             )
+        
         print("Response: \n", self.chat_history)
+        print("Response without context: \n", response_without_context)
 
-        return self.return_json(question, response)
+        return self.return_json(question, response, response_without_context)
 
     def get_relevant_documents(self, prompt: str):
         retrieved_docs = requests.post(
@@ -72,10 +91,11 @@ class HCSInsuranceAssistant:
             return retrieved_docs.json()[0][0]['entity']['text']
         return ""
     
-    def return_json(self, question: str, answer: str):
+    def return_json(self, question: str, answer: str, answer_without_context: str):
         return {
             "question": question,
             "answer": answer,
+            "answer_without_context": answer_without_context,
             "metadata": {
                 "source": "HCS-Insurance-Assistant",
                 "model": "granite-7b-lab-Q4_K_M.gguf",

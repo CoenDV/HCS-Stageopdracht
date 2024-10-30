@@ -30,14 +30,16 @@ export default {
 
                     this.messageHistory.push({
                         question: result.question,
-                        answer: result.answer
+                        answerRAG: result.answer,
+                        answerWithoutRAG: result.answer_without_context
                     });
                 })
                 .catch(error => {
                     console.log(error);
                     this.messageHistory.push({
                         question: this.temporary_question,
-                        answer: result.answer
+                        answerRAG: result.answer,
+                        answerWithoutRAG: result.answer_without_context
                     });
                     this.answerGenerating = false;
                 });
@@ -54,21 +56,40 @@ export default {
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">HCS-Chatbot</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header d-flex justify-content-center align-items-center">
+                    <img src="./../../public/images/favicon.svg" class="img-fluid mx-auto d-block" style="width: 50px;">
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="row col-10 p-2 messageBot rounded">Welkom bij de HCS-Chatbot. Hoe kan ik u helpen?</p>
-
+                    <div class="row border-bottom mb-2">
+                        <div class="col-6 border-end">
+                            <h3>Chatbot with RAG</h3>
+                        </div>
+                        <div class="col-6">
+                            <h3>Chatbot without RAG</h3>
+                        </div>
+                    </div>
                     <div v-for="message in messageHistory">
-                        <p class="row col-10 p-2 messageUser rounded float-end">
-                            {{ message.question }}
-                        </p>
+                        <div class="row">
+                            <div class="col-6 border-end">
+                                <p class="row col-10 p-2 messageUser rounded float-end">
+                                    {{ message.question }}
+                                </p>
 
-                        <p class="row col-10 p-2 messageBot rounded">
-                            {{ message.answer }}
-                        </p>
+                                <p class="row col-10 p-2 messageBot rounded">
+                                    {{ message.answerRAG }}
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <p class="row col-10 p-2 messageUser rounded float-end">
+                                    {{ message.question }}
+                                </p>
+
+                                <p class="row col-10 p-2 messageBot rounded">
+                                    {{ message.answerWithoutRAG }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                     <div v-if="answerGenerating">
                         <p class="row col-10 p-2 messageUser rounded float-end">
