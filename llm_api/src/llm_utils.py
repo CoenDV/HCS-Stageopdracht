@@ -52,7 +52,7 @@ class HCSInsuranceAssistant:
             n_ctx=2048,             # context length: decides the maximum number of tokens that can be processed by the model
             temperature=0.4,        # temperature: controls the creativity of the model
             n_gpu_layers= 1024,     # number of layers the GPU uses
-            n_batch=128,              # batch size: the number of samples that the model processes at once
+            n_batch=128,            # batch size: the number of samples that the model processes at once
         )
 
         # Chain
