@@ -1,5 +1,5 @@
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   annotations:
     alpha.image.policy.openshift.io/resolve-names: '*'
