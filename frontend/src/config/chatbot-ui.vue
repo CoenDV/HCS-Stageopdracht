@@ -99,7 +99,7 @@ export default {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input id="question" type="text" class="form-control col" placeholder="Type your message here">
+                    <input id="question" type="text" class="form-control col" placeholder="Type your message here" autofocus>
                     <button type="button" @click="askQuestion()" class="btn btn-primary col-4">Send Message</button>
                 </div>
             </div>

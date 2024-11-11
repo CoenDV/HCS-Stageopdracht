@@ -13,7 +13,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-assistant = HCSInsuranceAssistant("./../model/granite-7b-lab-Q4_K_M.gguf")
+assistant = HCSInsuranceAssistant("model/granite-3.0-8b-base-q4_k_m.gguf")
 
 class PromptRequest(BaseModel):
     prompt: str

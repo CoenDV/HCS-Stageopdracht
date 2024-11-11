@@ -1,4 +1,5 @@
 import requests
+import json
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 from langchain_community.llms import LlamaCpp
 from langchain_core.chat_history import InMemoryChatMessageHistory
@@ -8,23 +9,12 @@ class HCSInsuranceAssistant:
     def __init__(self, model_path: str):
         # System prompts
         self.system_prompt = SystemMessagePromptTemplate.from_template(
-            "You are a helpful assistant for HCS-Company car insurance,your task is to provide information about the car insurances from the company. "
-            "Your audience is a customer who is looking for information about car insurance. "
-            "Use the provided context to answer the question, if you don't know the answer, say so. "
-            "Keep the answer concise with a maximum of 5 sentences. "
-            "If you are greeted, respond with a greeting. "
-            "If you need more information, ask the customer. "
-            
+            "Je bent een assistent voor HCS-Company autoverzekeringen. Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI:. Geef directe antwoorden op basis van de context en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
             "Context: {context}"
         )
 
         self.system_prompt_without_RAG = SystemMessagePromptTemplate.from_template(
-            "You are a helpful assistant for HCS-Company car insurance,your task is to provide information about the car insurances from the company. "
-            "Your audience is a customer who is looking for information about car insurance. "
-            "If you don't know the answer, say so. "
-            "Keep the answer concise with a maximum of 5 sentences. "
-            "If you are greeted, respond with a greeting. "
-            "If you need more information, ask the customer. "
+            "Je bent een assistent voor HCS-Company autoverzekeringen. Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI:. Geef directe antwoorden op basis van de context en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
         )
 
         # Chat history
@@ -32,8 +22,8 @@ class HCSInsuranceAssistant:
 
         # Human prompt
         self.human_prompt = HumanMessagePromptTemplate.from_template(
-            "Question: {question} "
-            "Answer: "
+            "Vraag: {question} "
+            "Antwoord: "
         )
 
         # Chat templates
@@ -55,9 +45,9 @@ class HCSInsuranceAssistant:
         # AI Model
         self.llm = LlamaCpp(
             model_path=model_path,
-            max_tokens=75,          # max tokens: the maximum number of tokens that the model can generate
+            max_tokens=150,          # max tokens: the maximum number of tokens that the model can generate
             n_ctx=2048,             # context length: decides the maximum number of tokens that can be processed by the model
-            temperature=0,          # temperature: controls the creativity of the model
+            temperature=0.0,        # temperature: controls the creativity of the model
             n_gpu_layers= 1024,     # number of layers the GPU uses
             n_batch=128,            # batch size: the number of samples that the model processes at once
         )
@@ -75,7 +65,7 @@ class HCSInsuranceAssistant:
 
     def generate_response(self, question: str) -> str:
         retrieved_docs = self.get_relevant_documents(question)
-        print("Retrieved docs: ", retrieved_docs)
+        print("Retrieved docs: ", json.dumps(retrieved_docs, indent=4))
 
         response_without_context = self.chain_without_RAG.invoke(input = { "question": question } )
         response = self.chain_with_message_history.invoke(
@@ -95,10 +85,20 @@ class HCSInsuranceAssistant:
         )
 
         if retrieved_docs.json() != [[]]:
-            return retrieved_docs.json()[0][0]['entity']['text']
+            formatted_docs = []
+            for doc in retrieved_docs.json()[0]:
+                formatted_docs.append(doc['entity']['text'])
+            return formatted_docs
         return ""
     
     def return_json(self, question: str, answer: str, answer_without_context: str):
+        labels = ["AI:", "System:", "Human:", "Assistant:"]
+        for label in labels:
+            if label in answer:
+                answer = answer.replace(label, "")
+            if label in answer_without_context:
+                answer_without_context = answer_without_context.replace(label, "")
+
         return {
             "question": question,
             "answer": answer,
