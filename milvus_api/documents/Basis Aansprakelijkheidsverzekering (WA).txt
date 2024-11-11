@@ -6,5 +6,6 @@ Dekking:
 Lichamelijk Letsel: Tot €50.000 per persoon / €100.000 per ongeval.
 Materiële Schade: Tot €20.000 voor schade aan eigendommen van derden, zoals auto's en eigendommen.
 Eigen Risico: Geen eigen risico voor schade aan derden.
+Basispremie: €25 per maand
 
 Ideaal Voor: Mensen die zelden rijden of een oudere auto hebben met beperkte waarde.

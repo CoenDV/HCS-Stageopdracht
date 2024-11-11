@@ -1,0 +1,28 @@
+1. Leeftijd van de Auto
+0-3 jaar oud: Auto's van drie jaar of jonger worden gezien als nieuw en hebben meestal hogere premies, vooral bij allriskdekking, vanwege de hogere vervangingswaarde.
+Verhoging op standaardpremie: +20%
+4-8 jaar oud: Auto’s tussen vier en acht jaar oud worden als middenklasse beschouwd. De premies worden iets lager, aangezien de vervangingswaarde lager is dan bij nieuwe auto’s.
+Verhoging op standaardpremie: +10%
+9 jaar en ouder: Oudere voertuigen hebben lagere premies. De meeste eigenaren kiezen hiervoor enkel aansprakelijkheidsdekking of beperkte casco.
+Verlaging op standaardpremie: -15%
+
+2. Type Voertuig
+Sportauto’s en luxe modellen: Premies voor sportauto’s en luxe auto’s zijn meestal hoger vanwege hogere herstelkosten en verhoogd risico op diefstal.
+Verhoging op standaardpremie: +30%
+Elektrische voertuigen: Elektrische auto’s krijgen een speciaal tarief. De kosten voor accu- en laadpaaldekking kunnen extra worden toegevoegd.
+Verhoging op standaardpremie: +15%
+Standaard sedans en gezinsauto’s: Deze voertuigen krijgen een basispremie die afhankelijk is van leeftijd en gebruik.
+Verhoging op standaardpremie: Geen extra verhoging
+
+3. Vermogen (pk)
+Tot 150 pk: Standaardtarief.
+150 - 250 pk: Hogere premies vanwege verhoogde kans op snelheidsincidenten en hogere reparatiekosten.
+Verhoging op standaardpremie: +10%
+Meer dan 250 pk: Hoge premie vanwege de prestaties van het voertuig en verhoogde kans op schade.
+Verhoging op standaardpremie: +20%
+
+4. Dagelijkse of Incidentele Gebruiksstatus
+Dagelijks gebruik: Voertuigen die dagelijks worden gebruikt, zoals woon-werkverkeer, hebben hogere premies.
+Verhoging op standaardpremie: +15%
+Incidenteel gebruik: Auto’s die slechts sporadisch worden gebruikt, bijvoorbeeld voor recreatieve doeleinden, ontvangen een korting.
+Verlaging op standaardpremie: -10%

@@ -6,5 +6,6 @@ Dekking:
 Aansprakelijkheid: Basis WA-dekking.
 Aanvullende Dekking: Mogelijkheid om beperkte casco (WA+) of allrisk dekking toe te voegen.
 Premie: Variabel, gebaseerd op de gereden kilometers.
+Basispremie: €0,15 per kilometer (met een minimaal maandbedrag van €20)
 
 Ideaal Voor: Mensen die hun auto slechts af en toe gebruiken of voor korte ritten, zoals stadsritten of weekendverkeer.
