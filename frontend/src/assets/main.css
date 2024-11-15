@@ -37,7 +37,7 @@ body {
 
 .modal-content {
     height: 600px;
-    width: 800px;
+    width: 1000px;
     position: absolute;
     bottom: 100px;
 }
@@ -49,6 +49,6 @@ body {
 .modal-dialog {
     position: absolute;
     width: 25%;
-    right: 425px;
+    right: 635px;
     bottom: 0px;
 }

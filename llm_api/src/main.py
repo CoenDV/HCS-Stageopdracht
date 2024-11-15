@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from llm_utils import HCSInsuranceAssistant
@@ -13,14 +14,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-assistant = HCSInsuranceAssistant("model/granite-3.0-8b-base-q4_k_m.gguf") # https://huggingface.co/davelsphere/granite-3.0-8b-base-Q4_K_M-GGUF
+assistant = HCSInsuranceAssistant("model/granite-7b-instruct-Q4_K_M.gguf") # https://huggingface.co/tensorblock/granite-7b-instruct-GGUF
 
 class PromptRequest(BaseModel):
     prompt: str
 
-@app.post("/generate/")
-async def generate_text(request: PromptRequest):
-    return {"response": assistant.generate_response(request.prompt)}
+@app.post("/generate-with-RAG/")
+async def generate_text_with_RAG(request: PromptRequest):
+    return StreamingResponse(assistant.generate_response_with_RAG(request.prompt), media_type="text/plain")
+
+@app.post("/generate-without-RAG/")
+async def generate_text_without_RAG(request: PromptRequest):
+    return StreamingResponse(assistant.generate_response_without_RAG(request.prompt), media_type="text/plain")
 
 if __name__ == "__main__":
     import uvicorn

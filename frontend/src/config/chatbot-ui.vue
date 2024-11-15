@@ -1,48 +1,86 @@
 <script>
-import axios from 'axios';
 
 export default {
     name: "ChatbotUi",
     data() {
         return {
             temporary_question: '',
-            answerGenerating: false,
 
-            messageHistory: []
+            temporary_RAG_question: '',
+            temporary_RAG_answer: '',
+
+            temporary_without_RAG_question: '',
+            temporary_without_RAG_answer: '',
+
+            messageHistoryRAG: [],
+            messageHistoryWithoutRAG: [],
+
+            RagResponse: '',
+            WithoutRagResponse: '',
         }
     },
     methods: {
         askQuestion() {
-            this.answerGenerating = true;
             this.temporary_question = document.getElementById('question').value;
             document.getElementById('question').value = '';
 
-            axios.post("https://saved-ferret-rapid.ngrok-free.app/generate/",
-                {
-                    "prompt": this.temporary_question
-                }
-            )
-                .then(response => {
-                    this.answerGenerating = false;
+            this.RagResponse = '';
+            this.WithoutRagResponse = '';
 
-                    const result = response.data.response;
-                    console.log(result);
+            this.getChatbotResponse('https://saved-ferret-rapid.ngrok-free.app/generate-without-RAG/');
+            this.getChatbotResponse('https://saved-ferret-rapid.ngrok-free.app/generate-with-RAG/');
 
-                    this.messageHistory.push({
-                        question: result.question,
-                        answerRAG: result.answer,
-                        answerWithoutRAG: result.answer_without_context
-                    });
+        },
+        async getChatbotResponse(url) {
+            try {
+                this.temporary_RAG_question = this.temporary_question;
+                this.temporary_without_RAG_question = this.temporary_question;
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: this.temporary_question })
                 })
-                .catch(error => {
-                    console.log(error);
-                    this.messageHistory.push({
-                        question: this.temporary_question,
-                        answerRAG: result.answer,
-                        answerWithoutRAG: result.answer_without_context
-                    });
-                    this.answerGenerating = false;
-                });
+
+                this.retrieveChunks(response.body.getReader(), new TextDecoder(), url);
+
+            } catch (error) {
+                console.error("Streaming error: ", error);
+            }
+        },
+        async retrieveChunks(reader, decoder, url) {
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                if (url === 'https://saved-ferret-rapid.ngrok-free.app/generate-without-RAG/')
+                    this.temporary_without_RAG_answer += chunk;
+                else
+                    this.temporary_RAG_answer += chunk;
+            }
+
+            // Wait for the stream to finish before saving the messages
+            if (this.temporary_RAG_answer !== '' && this.temporary_without_RAG_answer !== '') {
+                this.saveMessages();
+            }
+        },
+        saveMessages() {
+            // save messages without RAG
+            this.messageHistoryWithoutRAG.push({
+                question: this.temporary_question,
+                answer: this.temporary_without_RAG_answer
+            });
+            this.temporary_without_RAG_question = '';
+            this.temporary_without_RAG_answer = '';
+
+            // save messages with RAG
+            this.messageHistoryRAG.push({
+                question: this.temporary_question,
+                answer: this.temporary_RAG_answer
+            });
+            this.temporary_RAG_question = '';
+            this.temporary_RAG_answer = '';
         }
     }
 };
@@ -69,37 +107,54 @@ export default {
                             <h3>Chatbot without RAG</h3>
                         </div>
                     </div>
-                    <div v-for="message in messageHistory">
-                        <div class="row">
-                            <div class="col-6 border-end">
+                    <div class="row">
+                        <!-- Chat History RAG -->
+                        <div class="col-6 border-end">
+                            <div v-for="message in messageHistoryRAG">
                                 <p class="row col-10 p-2 messageUser rounded float-end">
                                     {{ message.question }}
                                 </p>
 
                                 <p class="row col-10 p-2 messageBot rounded">
-                                    {{ message.answerRAG }}
+                                    {{ message.answer }}
                                 </p>
                             </div>
-                            <div class="col-6">
+                            <div>
+                                <p v-if="temporary_RAG_question != ''"
+                                    class="row col-10 p-2 messageUser rounded float-end">
+                                    {{ temporary_RAG_question }}
+                                </p>
+                                <p v-if="temporary_RAG_answer != ''" class="row col-10 p-2 messageBot rounded">
+                                    {{ temporary_RAG_answer }}
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Chat History without RAG -->
+                        <div class="col-6">
+                            <div v-for="message in messageHistoryWithoutRAG">
                                 <p class="row col-10 p-2 messageUser rounded float-end">
                                     {{ message.question }}
                                 </p>
 
                                 <p class="row col-10 p-2 messageBot rounded">
-                                    {{ message.answerWithoutRAG }}
+                                    {{ message.answer }}
+                                </p>
+                            </div>
+                            <div>
+                                <p v-if="temporary_without_RAG_question != ''"
+                                    class="row col-10 p-2 messageUser rounded float-end">
+                                    {{ temporary_without_RAG_question }}
+                                </p>
+                                <p v-if="temporary_without_RAG_answer != ''" class="row col-10 p-2 messageBot rounded">
+                                    {{ temporary_without_RAG_answer }}
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <div v-if="answerGenerating">
-                        <p class="row col-10 p-2 messageUser rounded float-end">
-                            {{ temporary_question }}
-                        </p>
-                        <div class="spinner-border mt-5"></div>
-                    </div>
                 </div>
                 <div class="modal-footer">
-                    <input id="question" type="text" class="form-control col" placeholder="Type your message here" autofocus>
+                    <input id="question" type="text" class="form-control col" placeholder="Type your message here"
+                        autofocus>
                     <button type="button" @click="askQuestion()" class="btn btn-primary col-4">Send Message</button>
                 </div>
             </div>
