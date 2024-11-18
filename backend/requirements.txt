@@ -4,3 +4,6 @@ Flask-Migrate
 Flask-Cors
 psycopg2-binary
 requests
+pgvector
+glob2
+sentence-transformers

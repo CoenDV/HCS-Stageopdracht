@@ -1,12 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
+from pgvector.sqlalchemy import Vector
 from enum import Enum
 
 db = SQLAlchemy()
-
-class InsuranceType(Enum):
-    WA = 1
-    WA_PLUS = 2
-    ALL_RISK = 3
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -62,8 +58,8 @@ class CustomerPolicy(db.Model):
 class InsurancePolicy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
-    insuranceType = db.Column(db.Enum(InsuranceType), nullable=False)
-    summary = db.Column(db.String(1024), nullable=True)
+    content = db.Column(db.Text, nullable=False)
+    embedding = db.Column(Vector(384), nullable=False)
     
     def __repr__(self):
         return f'<InsurancePolicy {self.title}>'
@@ -72,8 +68,8 @@ class InsurancePolicy(db.Model):
         return {
             "id": self.id,
             "title": self.title,
-            "insuranceType": self.insuranceType.name,
-            "summary": self.summary
+            "content": self.content,
+            "embedding": self.embedding
         }
 
 class Car(db.Model):

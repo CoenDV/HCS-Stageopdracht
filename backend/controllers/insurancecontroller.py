@@ -16,7 +16,6 @@ def get_customer_policies_from_customerid(id):
     customer_policies = InsuranceService.get_customer_policies_from_customerid(id)
     return jsonify([customer_policy.to_dict() for customer_policy in customer_policies])
 
-### INIT DOCUMENTS ###
 @insurance_bp.route('/documents', methods=['GET'])
 def get_documents():
     response = requests.get("https://milvus-api-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/documents/")
@@ -51,3 +50,9 @@ def get_insurance_policy_by_id(id):
 def get_insurance_policies_by_customer_id(customer_id):
     insurance_policies = InsuranceService.get_insurance_policies_by_customer_id(customer_id)
     return jsonify([insurance_policy.to_dict() for insurance_policy in insurance_policies])
+
+@insurance_bp.route('/insurance_policies/similar', methods=['POST'])
+def get_similar_policies():
+    data = request.get_json()
+    similar_policies = InsuranceService.get_similar_policies(data['text'])
+    return [policy.to_dict() for policy in similar_policies]

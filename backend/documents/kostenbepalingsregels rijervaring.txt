@@ -1,0 +1,27 @@
+1. Leeftijd van de Bestuurder
+18-24 jaar: Jonge bestuurders worden gezien als een verhoogd risico door hun beperkte ervaring.
+Verhoging op standaardpremie: +25%
+25-60 jaar: Deze groep ontvangt de standaardpremie.
+60+ jaar: Oudere bestuurders kunnen een hogere premie betalen vanwege een verhoogde kans op ongevallen.
+Verhoging op standaardpremie: +10%
+
+2. Ervaring in Rijjaren
+Minder dan 2 jaar rijervaring: Nieuwe bestuurders betalen een hogere premie vanwege beperkte ervaring.
+Verhoging op standaardpremie: +20%
+2-5 jaar rijervaring: Standaardpremie.
+Meer dan 5 jaar rijervaring: Ervaren bestuurders kunnen een korting ontvangen.
+Verlaging op standaardpremie: -10%
+
+3. Schadevrije Jaren
+0-2 schadevrije jaren: Standaardpremie.
+3-5 schadevrije jaren: Bestuurders met meerdere schadevrije jaren ontvangen een korting.
+Verlaging op standaardpremie: -10%
+Meer dan 5 schadevrije jaren: Maximaal tariefkorting voor schadevrije bestuurders.
+Verlaging op standaardpremie: -20%
+
+4. Verkeersovertredingen en Ongevallen in de Afgelopen 3 Jaar
+Geen overtredingen of ongevallen: Geen verhoging van de premie.
+1 overtreding of ongeval: Lichte verhoging vanwege verhoogd risico.
+Verhoging op standaardpremie: +5%
+Meer dan 1 overtreding of ongeval: Hogere premies als gevolg van risicoverhoging.
+Verhoging op standaardpremie: +15%

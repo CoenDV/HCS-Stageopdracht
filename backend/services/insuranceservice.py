@@ -1,7 +1,9 @@
 from repositories.insuranerepository import InsuranceRepository
 from models import InsurancePolicy, CustomerPolicy
+from sentence_transformers import SentenceTransformer
 
 class InsuranceService:
+    transformer = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
 
     def create_customer_policy(data):
         customer_policy = CustomerPolicy(
@@ -17,11 +19,12 @@ class InsuranceService:
         return InsuranceRepository.get_customer_policies_from_customerid(id)
 
     ### INSURANCE POLICIES ###
-    def create_insurance_policy(data):
+    @classmethod
+    def create_insurance_policy(cls, data):
         insurance_policy = InsurancePolicy(
             title = data['title'],
-            insuranceType = data['insuranceType'],
-            summary = data['summary'],
+            content = data['content'],
+            embedding = cls.transformer.encode(data['content']).tolist()
         )
         return InsuranceRepository.save(insurance_policy)
     
@@ -38,3 +41,7 @@ class InsuranceService:
         insurance_policy = InsuranceRepository.get_by_id(id)
         return InsuranceRepository.delete(insurance_policy)
     
+    @classmethod
+    def get_similar_policies(cls, policy_text):
+        text_embedding = cls.transformer.encode([policy_text])
+        return InsuranceRepository.get_similar_policies(text_embedding)
