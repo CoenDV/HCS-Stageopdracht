@@ -63,7 +63,7 @@ class HCSInsuranceAssistant:
         
         # Stream response with context
         async with self.lock:  # This ensures only one request accesses the function at a time
-            async for chunk in self.chain_with_RAG.astream(input = { "context": retrieved_docs, "question": question }):
+            async for chunk in self.chain_with_RAG.astream(input = { "context": retrieved_docs.content, "question": question }):
                 yield chunk
                 print("Chunk: ", chunk)
                 await asyncio.sleep(0) # Sleep to allow other tasks to run
@@ -80,13 +80,19 @@ class HCSInsuranceAssistant:
 
     def get_relevant_documents(self, prompt: str):
         retrieved_docs = requests.post(
-            "https://milvus-api-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/search/",
-            json={"query": prompt, "top_k": 2, "relevance_threshold": 0.4}
+            "http://localhost:5000/insurance_policies/similar",
+            json={"text": prompt}
         )
 
         if retrieved_docs.json() != [[]]:
             formatted_docs = []
-            for doc in retrieved_docs.json()[0]:
-                formatted_docs.append(doc['entity']['text'])
+            for doc in retrieved_docs.json():
+                formatted_docs.append(
+                    {
+                        "title": doc["title"],
+                        "content": doc["content"]
+                    }
+                )
+
             return formatted_docs
         return ""

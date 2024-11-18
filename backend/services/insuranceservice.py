@@ -43,5 +43,5 @@ class InsuranceService:
     
     @classmethod
     def get_similar_policies(cls, policy_text):
-        text_embedding = cls.transformer.encode([policy_text])
+        text_embedding = cls.transformer.encode(policy_text).tolist()
         return InsuranceRepository.get_similar_policies(text_embedding)

@@ -1,7 +1,5 @@
 from models import InsurancePolicy, CustomerPolicy, db
-from pgvector.sqlalchemy import Vector
-from sqlalchemy import select
-import json
+import numpy as np
 
 class InsuranceRepository:
 
@@ -31,11 +29,21 @@ class InsuranceRepository:
         db.session.commit()
         return insurance_policy
     
-    def get_similar_policies(text_embedding, top_k=2):
-        text_embedding = text_embedding.flatten()
-        
+    def get_similar_policies(text_embedding, top_k=2, relevance_threshold=0.5):
+        # text_embedding = text_embedding.flatten()
+
         # Create a query that finds the most similar insurance policies	
-        results = db.session.query(InsurancePolicy).order_by(InsurancePolicy.embedding.max_inner_product(text_embedding)).limit(top_k).all()
+        results = db.session.query(InsurancePolicy) \
+            .order_by(InsurancePolicy.embedding.max_inner_product(text_embedding)) \
+            .filter(InsurancePolicy.embedding.max_inner_product(text_embedding) < 0.5) \
+            .limit(2) \
+            .all()
+        
+        # Print results with their similarity scores
+        for result in results:
+            embedding_array = np.array(result.embedding)  # Convert embedding to a numpy array
+            similarity = np.dot(embedding_array, text_embedding)  # Calculate inner product
+            print(f"ID: {result.id}, Title: {result.title}, Similarity: {similarity}")
 
         for result in results:
             result.embedding = result.embedding.tolist()
