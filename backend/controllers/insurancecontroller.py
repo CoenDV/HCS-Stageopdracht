@@ -26,7 +26,7 @@ def get_documents():
 def create_insurance_policy():
     data = request.get_json()
     new_insurance_policy = InsuranceService.create_insurance_policy(data)
-    return jsonify(new_insurance_policy.to_dict()), 201
+    return new_insurance_policy.to_dict(), 201
 
 @insurance_bp.route('/insurance_policies', methods=['GET'])
 def get_all_insurance_policies():
@@ -55,4 +55,4 @@ def get_insurance_policies_by_customer_id(customer_id):
 def get_similar_policies():
     data = request.get_json()
     similar_policies = InsuranceService.get_similar_policies(data['text'])
-    return [policy.to_dict() for policy in similar_policies]
+    return jsonify([insurance_policy.to_dict() for insurance_policy in similar_policies]), 200

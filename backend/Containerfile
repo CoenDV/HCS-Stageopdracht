@@ -4,6 +4,7 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV TRANSFORMERS_CACHE=/app/.cache
 
 # Set the working directory in the container
 WORKDIR /app
@@ -21,6 +22,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN mkdir -p /app/.cache && \
     chown -R 1001480000:1001480000 /app/.cache && \
     chmod -R 770 /app/.cache
+
+# Switch to user 1001480000
+USER 1001480000
 
 # Copy the application code into the container
 COPY . .

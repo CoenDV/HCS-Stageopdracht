@@ -29,14 +29,14 @@ class InsuranceRepository:
         db.session.commit()
         return insurance_policy
     
-    def get_similar_policies(text_embedding, top_k=2, relevance_threshold=0.5):
+    def get_similar_policies(text_embedding, top_k=2, relevance_threshold=-0.5):
         # text_embedding = text_embedding.flatten()
 
         # Create a query that finds the most similar insurance policies	
         results = db.session.query(InsurancePolicy) \
             .order_by(InsurancePolicy.embedding.max_inner_product(text_embedding)) \
-            .filter(InsurancePolicy.embedding.max_inner_product(text_embedding) < 0.5) \
-            .limit(2) \
+            .filter(InsurancePolicy.embedding.max_inner_product(text_embedding) <= relevance_threshold) \
+            .limit(top_k) \
             .all()
         
         # Print results with their similarity scores

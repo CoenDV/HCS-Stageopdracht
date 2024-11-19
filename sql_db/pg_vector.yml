@@ -1,59 +1,97 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pgvector
+  name: postgresql
 spec:
+  strategy:
+    type: Recreate
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    activeDeadlineSeconds: 21600
   replicas: 1
   selector:
     matchLabels:
-      app: pgvector
+      app: postgresql
   template:
     metadata:
       labels:
-        app: pgvector
+        app: postgresql
     spec:
+      volumes:
+        - name: pgvector-pvc
+          persistentVolumeClaim:
+            claimName: pgvector-pvc
       containers:
-        - name: pgvector
-          image: pgvector/pgvector:pg17
-          ports:
-            - containerPort: 5432
+        - resources:
+            limits:
+              memory: 512Mi
+          readinessProbe:
+            exec:
+              command:
+                - /usr/libexec/check-container
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          name: postgresql
+          livenessProbe:
+            exec:
+              command:
+                - /usr/libexec/check-container
+                - '--live'
+            initialDelaySeconds: 120
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
           env:
-            - name: POSTGRES_USER
+            - name: POSTGRESQL_USER
               valueFrom:
                 secretKeyRef:
                   name: postgres
                   key: POSTGRESQL_USER
-            - name: POSTGRES_PASSWORD
+            - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres
                   key: POSTGRESQL_PASSWORD
-            - name: POSTGRES_DB
+            - name: POSTGRESQL_DATABASE
               valueFrom:
                 secretKeyRef:
                   name: postgres
                   key: POSTGRESQL_DATABASE
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
+          securityContext:
+            capabilities: {}
+            privileged: false
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: pgvector-storage
-      volumes:
-        - name: pgvector-storage
-          persistentVolumeClaim:
-            claimName: pgvector-pvc
+            - name: pgvector-pvc
+              mountPath: /var/lib/pgsql/data
+          terminationMessagePolicy: File
+          image: 'quay.io/rh-aiservices-bu/postgresql-15-pgvector-c9s:latest'
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
 
 ---
 
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-  name: pgvector
+  name: postgresql
 spec:
   selector:
-    app: pgvector # Matches the pod labels in the Deployment
+    app: postgresql
   ports:
-    - protocol: TCP
-      port: 5432 # Port exposed by the service
-      targetPort: 5432 # Container port
-  type: ClusterIP # Internal access only; change to LoadBalancer or NodePort for external access
+    - name: postgresql
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
