@@ -38,7 +38,7 @@ export default {
         </h2>
         <div :id="'panelsStayOpen-' + this.document.id" class="accordion-collapse collapse">
             <div class="accordion-body">
-                {{ this.document.text }}
+                {{ this.document.content }}
             </div>
         </div>
     </div>

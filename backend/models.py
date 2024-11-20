@@ -26,11 +26,11 @@ class Customer(db.Model):
 class CustomerPolicy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
-    dateStart = db.Column(db.Date, nullable=False)
-    pricePerMonth = db.Column(db.Float, nullable=False) 
+    date_start = db.Column(db.Date, nullable=False)
+    price_per_month = db.Column(db.Float, nullable=False) 
     
     car_licenseplate = db.Column(db.String(8), db.ForeignKey('car.licenseplate'), nullable=False)
-    insurancepolicy_id = db.Column(db.Integer, db.ForeignKey('insurance_policy.id'), nullable=False)
+    insurance_policy_id = db.Column(db.Integer, db.ForeignKey('insurance_policy.id'), nullable=False)
     
     # Relationship to Car using the 'car_licenseplate' foreign key
     car = db.relationship('Car', backref='customer_policies', lazy=True)
@@ -39,7 +39,7 @@ class CustomerPolicy(db.Model):
     insurancepolicy = db.relationship('InsurancePolicy', backref='customer_policies', lazy=True)
 
     def __repr__(self):
-        return f'<CustomerPolicy {self.customer_id} {self.insurancepolicy_id}>'
+        return f'<CustomerPolicy {self.customer_id} {self.insurance_policy_id}>'
     
     def to_dict(self):
         # Include the related InsurancePolicy and Car objects
@@ -51,8 +51,8 @@ class CustomerPolicy(db.Model):
             "customer_id": self.customer_id,
             "insurance_policy": insurance_policy_dict,
             "car": car_dict,
-            "dateStart": self.dateStart,
-            "pricePerMonth": self.pricePerMonth
+            "date_start": self.date_start,
+            "price_per_month": self.price_per_month
         }
 
 class InsurancePolicy(db.Model):
@@ -69,7 +69,6 @@ class InsurancePolicy(db.Model):
             "id": self.id,
             "title": self.title,
             "content": self.content,
-            "embedding": self.embedding
         }
 
 class Car(db.Model):
@@ -77,7 +76,7 @@ class Car(db.Model):
     brand = db.Column(db.String(50), nullable=False)
     model = db.Column(db.String(50), nullable=False)
     year = db.Column(db.Integer, nullable=False)
-    currentValue = db.Column(db.Float, nullable=False)
+    current_value = db.Column(db.Float, nullable=False)
 
     # Backref 'customer_policies' is already created by the relationship in CustomerPolicy
     def __repr__(self):
@@ -89,5 +88,5 @@ class Car(db.Model):
             "brand": self.brand,
             "model": self.model,
             "year": self.year,
-            "currentValue": self.currentValue,
+            "current_value": self.current_value,
         }

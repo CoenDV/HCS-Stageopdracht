@@ -19,7 +19,7 @@ export default {
     },
     methods: {
         getDocuments() {
-            axios.get('/documents')
+            axios.get('/insurance_policies')
                 .then(response => {
                     this.documents = response.data;
                     console.log(this.documents);

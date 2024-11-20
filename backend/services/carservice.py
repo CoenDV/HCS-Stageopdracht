@@ -11,7 +11,7 @@ class CarService:
             brand=data['brand'],
             model=data['model'],
             year=data['year'],
-            currentValue=data['currentValue'],
+            current_value=data['current_value'],
         )
         return CarRepository.save(car)
 

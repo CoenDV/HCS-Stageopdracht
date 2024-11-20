@@ -8,15 +8,18 @@ class InsuranceService:
     def create_customer_policy(data):
         customer_policy = CustomerPolicy(
             customer_id = data['customer_id'],
-            dateStart = data['dateStart'],
-            pricePerMonth = data['pricePerMonth'],
+            date_start = data['date_start'],
+            price_per_month = data['price_per_month'],
             car_licenseplate = data['car_licenseplate'],
-            insurancepolicy_id = data['insurancepolicy_id']
+            insurance_policy_id = data['insurance_policy_id']
         )
-        return InsuranceRepository.save(customer_policy)
+        return InsuranceRepository.save_customer_policy(customer_policy)
 
     def get_customer_policies_from_customerid(id):
-        return InsuranceRepository.get_customer_policies_from_customerid(id)
+        customer_policies = InsuranceRepository.get_customer_policies_from_customerid(id)
+        for customer_policy in customer_policies:
+            print(customer_policy.to_dict())
+        return customer_policies
 
     ### INSURANCE POLICIES ###
     @classmethod

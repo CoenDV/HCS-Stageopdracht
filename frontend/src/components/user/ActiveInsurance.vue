@@ -29,25 +29,21 @@ export default {
                         <label for="insurance" class="form-label">Insurance: </label>
                         <input type="text" class="form-control" id="insurance" :value="insurance.insurance_policy.title" disabled>
                     </div>
-                    <div class="col mb-3">
-                        <label for="insuranceType" class="form-label">Insurance Type: </label>
-                        <input type="text" class="form-control" id="insuranceType" :value="insurance.insurance_policy.insuranceType" disabled>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col mb-3">
                         <label for="insurance" class="form-label">Start date: </label>
-                        <input type="text" class="form-control" id="insurance" :value="insurance.dateStart" disabled>
+                        <input type="text" class="form-control" id="insurance" :value="insurance.date_start" disabled>
                     </div>
                     <div class="col mb-3">
                         <label for="insuranceType" class="form-label">Price per month: </label>
-                        <input type="text" class="form-control" id="insuranceType" :value="insurance.pricePerMonth" disabled>
+                        <input type="text" class="form-control" id="insuranceType" :value="insurance.price_per_month" disabled>
                     </div>
                 </div>
                 <div class="col mb-3">
                     <label for="summary" class="form-label">Summary: </label>
                     <textarea type="text" class="form-control" id="insuranceCompany" rows="3">
-                        {{ insurance.insurance_policy.summary }}
+                        {{ insurance.insurance_policy.content }}
                     </textarea>
                 </div>
             </div>

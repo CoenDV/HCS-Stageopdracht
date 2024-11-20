@@ -9,17 +9,12 @@ insurance_bp = Blueprint('insurance_bp', __name__)
 def create_customer_policy():
     data = request.get_json()
     new_customer_policy = InsuranceService.create_customer_policy(data)
-    return jsonify(new_customer_policy.to_dict()), 201
+    return new_customer_policy.to_dict(), 201
 
 @insurance_bp.route('/customer_policies/<int:id>', methods=['GET'])
 def get_customer_policies_from_customerid(id):
     customer_policies = InsuranceService.get_customer_policies_from_customerid(id)
-    return jsonify([customer_policy.to_dict() for customer_policy in customer_policies])
-
-@insurance_bp.route('/documents', methods=['GET'])
-def get_documents():
-    response = requests.get("https://milvus-api-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/documents/")
-    return response.json()
+    return [customer_policy.to_dict() for customer_policy in customer_policies], 200
 
 ### INIT INSURANCE POLICIES ###
 @insurance_bp.route('/insurance_policies', methods=['POST'])
@@ -31,7 +26,7 @@ def create_insurance_policy():
 @insurance_bp.route('/insurance_policies', methods=['GET'])
 def get_all_insurance_policies():
     insurance_policies = InsuranceService.get_all_insurance_policies()
-    return jsonify([insurance_policy.to_dict() for insurance_policy in insurance_policies])
+    return jsonify([insurance_policy.to_dict() for insurance_policy in insurance_policies]), 200
 
 @insurance_bp.route('/insurance_policies/<int:id>', methods=['DELETE'])
 def delete_insurance_policy(id):
