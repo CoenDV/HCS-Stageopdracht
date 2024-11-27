@@ -47,14 +47,14 @@ export default {
 
         <div class="row m-0">
 
-            <div class="col-4">
+            <div class="col-4 z-3">
                 <AccountInfo />
 
                 <CarInfo v-for="insurance in insurances" v-bind:car="insurance.car" />
             </div>
 
             <div class="col-8">
-                <div class="accordion col-11 mt-5" id="accordionPanelsStayOpenExample">
+                <div class="accordion col-11 mt-5 z-3" id="accordionPanelsStayOpenExample">
                     <ActiveInsurance v-for="insurance in insurances" v-bind:insurance="insurance" />
                 </div>
             </div>

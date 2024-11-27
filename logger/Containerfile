@@ -1,0 +1,33 @@
+# Use the official Python image from the Docker Hub
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV TRANSFORMERS_CACHE=/app/.cache
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy requirements.txt first for efficient caching
+COPY requirements.txt .
+
+# Install the required Python packages
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --no-cache-dir sentence-transformers
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Create the .cache directory and give user full access with group permissions
+RUN mkdir -p /app/.cache && \
+    chown -R 1001480000:1001480000 /app/.cache && \
+    chmod -R 770 /app/.cache
+
+# Switch to user 1001480000
+USER 1001480000
+
+# Copy the application code into the container
+COPY . .
+
+# Set the command to run the application
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]

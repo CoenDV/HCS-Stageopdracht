@@ -41,7 +41,7 @@ export default {
     <div class="container-fluid p-0 d-flex justify-content-center">
         <img src="/images/decoration.png" class="img-fluid position-absolute bottom-0 start-0 m-5">
 
-        <div class="accordion col-8 mt-5" id="accordionPanelsStayOpenExample">
+        <div class="accordion col-8 mt-5 z-3" id="accordionPanelsStayOpenExample">
             <DocumentView v-for="document in documents" :document="document" />
         </div>
 

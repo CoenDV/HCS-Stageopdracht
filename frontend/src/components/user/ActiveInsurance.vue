@@ -37,12 +37,12 @@ export default {
                     </div>
                     <div class="col mb-3">
                         <label for="insuranceType" class="form-label">Price per month: </label>
-                        <input type="text" class="form-control" id="insuranceType" :value="insurance.price_per_month" disabled>
+                        <input type="text" class="form-control" id="insuranceType" :value="parseFloat(insurance.price_per_month).toFixed(2)" disabled>
                     </div>
                 </div>
                 <div class="col mb-3">
                     <label for="summary" class="form-label">Summary: </label>
-                    <textarea type="text" class="form-control" id="insuranceCompany" rows="3">
+                    <textarea type="text" class="form-control" id="insuranceCompany" rows="5">
                         {{ insurance.insurance_policy.content }}
                     </textarea>
                 </div>
