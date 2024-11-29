@@ -4,7 +4,7 @@ import Login from '@/components/user/Login.vue'
 import Dashboard from '@/components/dashboard/Dashboard.vue'
 import AvailableDocuments from '@/components/documents/AvailableDocuments.vue'
 import account from '@/components/user/Account.vue'
-import logs from '@/components/logs/LogOverview.vue'
+import logs from '@/components/logview/LogOverview.vue'
 
 const router = createRouter({
     history: createWebHistory("/"),
