@@ -4,7 +4,7 @@ class Repository:
     def get_all_frontend_logs():
         return Frontend_log.query.all()
 
-    def save(frontend_log):
+    def save_frontend_log(frontend_log):
         db.session.add(frontend_log)
         db.session.commit()
         return frontend_log
@@ -12,7 +12,7 @@ class Repository:
     def get_all_backend_logs():
         return Backend_log.query.all()
     
-    def save(backend_log):
+    def save_backend_log(backend_log):
         db.session.add(backend_log)
         db.session.commit()
         return backend_log
@@ -20,7 +20,7 @@ class Repository:
     def get_all_llm_logs():
         return Llm_log.query.all()
     
-    def save(llm_log):
+    def save_llm_log(llm_log):
         db.session.add(llm_log)
         db.session.commit()
         return llm_log

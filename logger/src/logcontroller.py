@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 from src.logservice import LogService
-import time
 
 controller = Blueprint('controller', __name__)
 
