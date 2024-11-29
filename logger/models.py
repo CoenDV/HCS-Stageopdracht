@@ -21,7 +21,7 @@ class Frontend_log(db.Model):
 class Backend_log(db.Model):
     __tablename__ = 'backend_logs'
     correlation_id = db.Column(db.Integer, primary_key=True)
-    retrieved_document_id = db.Column(db.Integer, nullable=True)
+    retrieved_documents = db.Column(db.Text, nullable=True)
     similarity_score = db.Column(db.Float, nullable=True)
     time = db.Column(db.Time, nullable=False)
     url = db.Column(db.String(255), nullable=False)
@@ -31,7 +31,7 @@ class Backend_log(db.Model):
     
     def to_dict(self):
         return {
-            "retrieved_document_id": self.retrieved_document_id,
+            "retrieved_documents": self.retrieved_documents,
             "similarity_score": self.similarity_score,
             "time": datetime.time.strftime(self.time, "%H:%M:%S"),
             "url": self.url

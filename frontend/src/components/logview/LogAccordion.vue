@@ -56,7 +56,7 @@ export default {
                 <div class="row">
                     <div class="col mb-3">
                         <label for="merk" class="form-label">Context: </label>
-                        <input type="text" class="form-control" id="merk" :value="log.backend_log.retrieved_document_id"
+                        <input type="text" class="form-control" id="merk" :value="log.backend_log.retrieved_documents"
                             disabled>
                     </div>
                     <div class="col mb-3">

@@ -28,7 +28,7 @@ class LogService:
     def save_backend_log(backend_log):
         backend_log = Backend_log(
             correlation_id=backend_log["correlation_id"],
-            retrieved_document_id=backend_log["retrieved_document_id"],
+            retrieved_documents=backend_log["retrieved_documents"],
             similarity_score=backend_log["similarity_score"],
             time=backend_log["time"],
             url=backend_log["url"],
