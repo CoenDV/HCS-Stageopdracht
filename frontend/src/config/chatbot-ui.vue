@@ -1,4 +1,5 @@
 <script>
+import { uuid } from 'vue-uuid';
 
 export default {
     name: "ChatbotUi",
@@ -27,11 +28,25 @@ export default {
             this.RagResponse = '';
             this.WithoutRagResponse = '';
 
-            this.getChatbotResponse('https://saved-ferret-rapid.ngrok-free.app/generate-without-RAG/');
-            this.getChatbotResponse('https://saved-ferret-rapid.ngrok-free.app/generate-with-RAG/');
+            const correlation_id = uuid.v4();
+            this.logRequest(correlation_id);
 
+
+            this.getChatbotResponse('https://saved-ferret-rapid.ngrok-free.app/generate-without-RAG/', correlation_id);
+            this.getChatbotResponse('https://saved-ferret-rapid.ngrok-free.app/generate-with-RAG/', correlation_id);
         },
-        async getChatbotResponse(url) {
+        async logRequest(correlation_id) {
+            await fetch('https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/frontend_logs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    correlation_id: correlation_id,
+                    time: new Date().toLocaleTimeString(),
+                    url: window.location.href
+                })
+            })
+        },
+        async getChatbotResponse(url, correlation_id) {
             try {
                 this.temporary_RAG_question = this.temporary_question;
                 this.temporary_without_RAG_question = this.temporary_question;
@@ -39,7 +54,10 @@ export default {
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: this.temporary_question })
+                    body: JSON.stringify({ 
+                        prompt: this.temporary_question,
+                        correlation_id: correlation_id
+                    })
                 })
 
                 this.retrieveChunks(response.body.getReader(), new TextDecoder(), url);

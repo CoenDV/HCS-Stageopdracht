@@ -26,9 +26,15 @@ class LogService:
         return Repository.get_all()
     
     def save_backend_log(backend_log):
+        docs = []
+        for doc in backend_log["retrieved_documents"]:
+            docs.append(
+                "title: " + doc["title"] + "content: " + doc["content"]
+            )
+
         backend_log = Backend_log(
             correlation_id=backend_log["correlation_id"],
-            retrieved_documents=backend_log["retrieved_documents"],
+            retrieved_documents=docs,
             similarity_score=backend_log["similarity_score"],
             time=backend_log["time"],
             url=backend_log["url"],

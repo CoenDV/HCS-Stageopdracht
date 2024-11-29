@@ -18,14 +18,15 @@ assistant = HCSInsuranceAssistant("model/granite-7b-instruct-Q4_K_M.gguf") # htt
 
 class PromptRequest(BaseModel):
     prompt: str
+    correlation_id: str
 
 @app.post("/generate-with-RAG/")
 async def generate_text_with_RAG(request: PromptRequest):
-    return StreamingResponse(assistant.generate_response_with_RAG(request.prompt), media_type="text/plain")
+    return StreamingResponse(assistant.generate_response_with_RAG(request), media_type="text/plain")
 
 @app.post("/generate-without-RAG/")
 async def generate_text_without_RAG(request: PromptRequest):
-    return StreamingResponse(assistant.generate_response_without_RAG(request.prompt), media_type="text/plain")
+    return StreamingResponse(assistant.generate_response_without_RAG(request), media_type="text/plain")
 
 if __name__ == "__main__":
     import uvicorn

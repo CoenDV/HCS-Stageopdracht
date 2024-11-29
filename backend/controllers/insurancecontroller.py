@@ -49,5 +49,5 @@ def get_insurance_policies_by_customer_id(customer_id):
 @insurance_bp.route('/insurance_policies/similar', methods=['POST'])
 def get_similar_policies():
     data = request.get_json()
-    similar_policies = InsuranceService.get_similar_policies(data['text'])
-    return jsonify([insurance_policy.to_dict() for insurance_policy in similar_policies]), 200
+    similar_policies = InsuranceService.get_similar_policies(data)
+    return similar_policies, 200

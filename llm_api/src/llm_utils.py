@@ -1,9 +1,12 @@
-import requests
-import json
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 from langchain_community.llms import LlamaCpp
 from langchain_core.output_parsers import StrOutputParser
+
+import requests
+import json
 import asyncio
+import time
+import socket
 
 class HCSInsuranceAssistant:
     def __init__(self, model_path: str):
@@ -57,31 +60,62 @@ class HCSInsuranceAssistant:
         self.chain_with_RAG = self.prompt | self.llm | parser
         self.chain_without_RAG = self.prompt_without_RAG | self.llm | parser
 
-    async def generate_response_with_RAG(self, question: str) -> str:
-        retrieved_docs = self.get_relevant_documents(question)
+    async def generate_response_with_RAG(self, request: object):
+        retrieved_docs = self.get_relevant_documents(request)
         print("Retrieved docs: ", json.dumps(retrieved_docs, indent=4))
-        
+
+        answer = ""    
         # Stream response with context
         async with self.lock:  # This ensures only one request accesses the function at a time
-            async for chunk in self.chain_with_RAG.astream(input = { "context": retrieved_docs, "question": question }):
+            duration = time.time()
+            async for chunk in self.chain_with_RAG.astream(input = { "context": retrieved_docs, "question": request.prompt }):
                 yield chunk
+                answer += chunk
                 print("Chunk: ", chunk)
                 await asyncio.sleep(0) # Sleep to allow other tasks to run
+
+        print("Answer: ", answer)
+        requests.post(
+            "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/llm_logs",
+            json={
+                "correlation_id": request.correlation_id,
+                "with_rag_answer": answer,
+                "with_rag_duration": time.time() - duration,
+                "url": socket.gethostbyname(socket.gethostname())
+            }
+        )
         return
 
-    async def generate_response_without_RAG(self, question: str) -> str:
+    async def generate_response_without_RAG(self, request: object) -> object:
         # Stream response without context
+        answer = ""
         async with self.lock:  # This ensures only one request accesses the function at a time
-            async for chunk in self.chain_without_RAG.astream(input = { "question": question }):
+            duration = time.time()
+            async for chunk in self.chain_without_RAG.astream(input = { "question": request.prompt }):
                 yield chunk
+                answer += chunk
                 print("Chunk: ", chunk)
                 await asyncio.sleep(0) # Sleep to allow other tasks to run
+
+        print("Answer: ", answer)
+        requests.post(
+            "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/llm_logs",
+            json={
+                "correlation_id": request.correlation_id,
+                "without_rag_answer": answer,
+                "without_rag_duration": time.time() - duration,
+                "url": socket.gethostbyname(socket.gethostname())
+            }
+        )
         return
 
-    def get_relevant_documents(self, prompt: str):
+    def get_relevant_documents(self, request: object):
         retrieved_docs = requests.post(
             "https://hcs-backend-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/insurance_policies/similar",
-            json={"text": prompt}
+            json={
+                "text": request.prompt,
+                "correlation_id": request.correlation_id
+                }
         )
 
         if retrieved_docs.json() != []:

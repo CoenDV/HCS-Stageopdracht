@@ -1,6 +1,9 @@
 from repositories.insuranerepository import InsuranceRepository
 from models import InsurancePolicy, CustomerPolicy
 from sentence_transformers import SentenceTransformer
+import requests
+import time
+import socket
 
 class InsuranceService:
     transformer = SentenceTransformer('all-MiniLM-L6-v2', cache_folder='/app/.cache')
@@ -45,6 +48,19 @@ class InsuranceService:
         return InsuranceRepository.delete(insurance_policy)
     
     @classmethod
-    def get_similar_policies(cls, policy_text):
-        text_embedding = cls.transformer.encode(policy_text).tolist()
-        return InsuranceRepository.get_similar_policies(text_embedding)
+    def get_similar_policies(cls, data):
+        text_embedding = cls.transformer.encode(data["text"]).tolist()
+        return_data = InsuranceRepository.get_similar_policies(text_embedding)
+
+        requests.post(
+            "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/backend_logs",
+            json={
+                "correlation_id": data["correlation_id"],
+                "retrieved_documents": return_data["retrieved_documents"],
+                "similarity_score": return_data["similarity_score"],
+                "time": time.strftime("%H:%M:%S", time.localtime()),
+                "url": socket.gethostbyname(socket.gethostname())
+            }
+        )
+
+        return return_data["retrieved_documents"]
