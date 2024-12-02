@@ -5,7 +5,7 @@ db = SQLAlchemy()
 
 class Frontend_log(db.Model):
     __tablename__ = 'frontend_logs'
-    correlation_id = db.Column(db.Integer, primary_key=True)
+    correlation_id = db.Column(db.String(36), primary_key=True)
     time = db.Column(db.Time, nullable=False)
     url = db.Column(db.String(255), nullable=False)
 
@@ -20,7 +20,7 @@ class Frontend_log(db.Model):
 
 class Backend_log(db.Model):
     __tablename__ = 'backend_logs'
-    correlation_id = db.Column(db.Integer, primary_key=True)
+    correlation_id = db.Column(db.String(36), primary_key=True)
     retrieved_documents = db.Column(db.Text, nullable=True)
     similarity_score = db.Column(db.Float, nullable=True)
     time = db.Column(db.Time, nullable=False)
@@ -37,13 +37,11 @@ class Backend_log(db.Model):
             "url": self.url
         }
     
-class Llm_log(db.Model):
-    __tablename__ = 'llm_logs'
-    correlation_id = db.Column(db.Integer, primary_key=True)
-    without_rag_answer = db.Column(db.String(255), nullable=True)
-    without_rag_duration = db.Column(db.Time, nullable=True)
-    with_rag_answer = db.Column(db.String(255), nullable=True)
-    with_rag_duration = db.Column(db.Time, nullable=True)
+class Llm_without_rag_log(db.Model):
+    __tablename__ = 'llm_without_rag_logs'
+    correlation_id = db.Column(db.String(36), primary_key=True)
+    without_rag_answer = db.Column(db.String(255), nullable=False)
+    without_rag_duration = db.Column(db.Time, nullable=False)
     url = db.Column(db.String(255), nullable=False)
 
     def __repr__(self):
@@ -53,6 +51,21 @@ class Llm_log(db.Model):
         return {
             "without_rag_answer": self.without_rag_answer,
             "without_rag_duration": datetime.time.strftime(self.without_rag_duration, "%H:%M:%S"),
+            "url": self.url
+        }
+    
+class Llm_with_rag_log(db.Model):
+    __tablename__ = 'llm_with_rag_logs'
+    correlation_id = db.Column(db.String(36), primary_key=True)
+    with_rag_answer = db.Column(db.String(255), nullable=False)
+    with_rag_duration = db.Column(db.Time, nullable=False)
+    url = db.Column(db.String(255), nullable=False)
+
+    def __repr__(self):
+        return f'<Llm_logs {self.correlation_id}>'
+    
+    def to_dict(self):
+        return {
             "with_rag_answer": self.with_rag_answer,
             "with_rag_duration": datetime.time.strftime(self.with_rag_duration, "%H:%M:%S"),
             "url": self.url

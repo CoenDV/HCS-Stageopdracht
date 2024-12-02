@@ -2,6 +2,7 @@ from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplat
 from langchain_community.llms import LlamaCpp
 from langchain_core.output_parsers import StrOutputParser
 
+from datetime import datetime
 import requests
 import json
 import asyncio
@@ -67,20 +68,20 @@ class HCSInsuranceAssistant:
         answer = ""    
         # Stream response with context
         async with self.lock:  # This ensures only one request accesses the function at a time
-            duration = time.time()
+            startTime = datetime.now()
             async for chunk in self.chain_with_RAG.astream(input = { "context": retrieved_docs, "question": request.prompt }):
                 yield chunk
                 answer += chunk
-                print("Chunk: ", chunk)
                 await asyncio.sleep(0) # Sleep to allow other tasks to run
 
-        print("Answer: ", answer)
+        timedelta = datetime.now() - startTime
+        print("Duration: ", timedelta)
         requests.post(
-            "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/llm_logs",
+            "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/llm_with_rag_logs",
             json={
                 "correlation_id": request.correlation_id,
                 "with_rag_answer": answer,
-                "with_rag_duration": time.time() - duration,
+                "with_rag_duration": str(timedelta),
                 "url": socket.gethostbyname(socket.gethostname())
             }
         )
@@ -90,20 +91,20 @@ class HCSInsuranceAssistant:
         # Stream response without context
         answer = ""
         async with self.lock:  # This ensures only one request accesses the function at a time
-            duration = time.time()
+            startTime = datetime.now()
             async for chunk in self.chain_without_RAG.astream(input = { "question": request.prompt }):
                 yield chunk
                 answer += chunk
-                print("Chunk: ", chunk)
                 await asyncio.sleep(0) # Sleep to allow other tasks to run
 
-        print("Answer: ", answer)
+        timedelta = datetime.now() - startTime
+        print("Duration: ", timedelta)
         requests.post(
-            "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/llm_logs",
+            "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/llm_without_rag_logs",
             json={
                 "correlation_id": request.correlation_id,
                 "without_rag_answer": answer,
-                "without_rag_duration": time.time() - duration,
+                "without_rag_duration": str(timedelta),
                 "url": socket.gethostbyname(socket.gethostname())
             }
         )

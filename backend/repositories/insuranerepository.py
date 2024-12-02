@@ -48,9 +48,13 @@ class InsuranceRepository:
         for result in results:
             result.embedding = result.embedding.tolist()
 
-        print("Retrieved documents: ", [insurance_policy.to_dict() for insurance_policy in results])
-            
-        return {
-            "retrieved_documents": [insurance_policy.to_dict() for insurance_policy in results],
-            "similarity_score": np.dot(results[0].embedding , text_embedding)  # Calculate inner product
-        }
+        if not results:
+            return {
+                "retrieved_documents": [],
+                "similarity_score": 0
+            }
+        else:
+            return {
+                "retrieved_documents": [insurance_policy.to_dict() for insurance_policy in results],
+                "similarity_score": np.dot(results[0].embedding , text_embedding)  # Calculate inner product
+            }

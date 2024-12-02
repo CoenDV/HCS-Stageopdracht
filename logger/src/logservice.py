@@ -1,15 +1,14 @@
 from src.logrepository import Repository
-from models import Frontend_log, Backend_log, Llm_log
-
-import time
+from models import Frontend_log, Backend_log, Llm_with_rag_log, Llm_without_rag_log
 
 class LogService:
     def get_all_logs():
-        frontend_logs = Repository.get_all_frontend_logs()
-        backend_logs = Repository.get_all_backend_logs()
-        llm_logs = Repository.get_all_llm_logs()
-
-        return LogService.format_logs(frontend_logs, backend_logs, llm_logs)
+        return LogService.format_logs(
+            Repository.get_all_frontend_logs(), 
+            Repository.get_all_backend_logs(), 
+            Repository.get_all_llm_with_rag_logs(), 
+            Repository.get_all_llm_without_rag_logs()
+        )
     
     def get_all_frontend_logs():
         return Repository.get_all()
@@ -41,31 +40,39 @@ class LogService:
         )
         return Repository.save_backend_log(backend_log)
     
-    def get_all_llm_logs():
+    def get_all_llm_without_rag_logs():
         return Repository.get_all()
     
-    def save_llm_log(llm_log):
-        llm_log = Llm_log(
+    def save_llm_without_rag_log(llm_log):
+        llm_log = Llm_without_rag_log(
             correlation_id=llm_log["correlation_id"],
             without_rag_answer=llm_log["without_rag_answer"],
             without_rag_duration=llm_log["without_rag_duration"],
+            url=llm_log["url"],
+        )
+        return Repository.save_llm_without_rag_log(llm_log)
+    
+    def get_all_llm_with_rag_logs():
+        return Repository.get_all()
+    
+    def save_llm_with_rag_log(llm_log):
+        llm_log = Llm_with_rag_log(
+            correlation_id=llm_log["correlation_id"],
             with_rag_answer=llm_log["with_rag_answer"],
             with_rag_duration=llm_log["with_rag_duration"],
             url=llm_log["url"],
         )
-        return Repository.save_llm_log(llm_log)
+        return Repository.save_llm_with_rag_log(llm_log)
     
-    def format_logs(frontend_logs, backend_logs, llm_logs):
+    def format_logs(frontend_logs, backend_logs, llm_with_rag_logs, llm_without_rag_logs):
         logs = []
-        for frontend_log in frontend_logs:
-            for backend_log in backend_logs:
-                for llm_log in llm_logs:
-                    if frontend_log.correlation_id == backend_log.correlation_id == llm_log.correlation_id:
-                        logs.append({
-                            "correlation_id": frontend_log.correlation_id,
-                            "frontend_log": frontend_log.to_dict(),
-                            "backend_log": backend_log.to_dict(),
-                            "llm_log": llm_log.to_dict()
-                        })
+        for i in range(len(frontend_logs)):
+            logs.append({
+                "correlation_id": frontend_logs[i].correlation_id,
+                "frontend": frontend_logs[i].to_dict(),
+                "backend": backend_logs[i].to_dict(),
+                "llm_with_rag": llm_with_rag_logs[i].to_dict(),
+                "llm_without_rag": llm_without_rag_logs[i].to_dict()
+            })
 
         return logs
