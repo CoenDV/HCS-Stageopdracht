@@ -4,6 +4,7 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV TZ=CET
 ENV TRANSFORMERS_CACHE=/app/.cache
 
 # Set the working directory in the container
