@@ -121,6 +121,10 @@ export default {
                             <td>{{ log.llm_without_rag.without_rag_duration }}</td>
                         </tr>
                         <tr>
+                            <td>Model</td>
+                            <td>{{ log.llm_without_rag.model }}</td>
+                        </tr>
+                        <tr>
                             <td>Url</td>
                             <td class="text-primary">{{ log.llm_without_rag.url }}</td>
                         </tr>
@@ -143,6 +147,10 @@ export default {
                         <tr>
                             <td>Tijd met context</td>
                             <td>{{ log.llm_with_rag.with_rag_duration }}</td>
+                        </tr>
+                        <tr>
+                            <td>Model</td>
+                            <td>{{ log.llm_without_rag.model }}</td>
                         </tr>
                         <tr>
                             <td>Url</td>

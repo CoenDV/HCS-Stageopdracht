@@ -105,7 +105,7 @@ export default {
 </script>
 
 <template>
-    <button class="position-absolute bottom-0 end-0 m-5" data-bs-toggle="modal" data-bs-target="#exampleModal"
+    <button class="position-absolute bottom-0 end-0 m-5 z-3" data-bs-toggle="modal" data-bs-target="#exampleModal"
         style="background-color: transparent; border-color: transparent;"><img src="/images/chatbotButton.svg"
             class="img-fluid"></button>
     <!-- Modal -->

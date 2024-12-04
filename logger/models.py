@@ -43,6 +43,7 @@ class Llm_without_rag_log(db.Model):
     without_rag_answer = db.Column(db.String(255), nullable=False)
     without_rag_duration = db.Column(db.Time, nullable=False)
     url = db.Column(db.String(255), nullable=False)
+    model = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
         return f'<Llm_logs {self.correlation_id}>'
@@ -51,7 +52,8 @@ class Llm_without_rag_log(db.Model):
         return {
             "without_rag_answer": self.without_rag_answer,
             "without_rag_duration": datetime.time.strftime(self.without_rag_duration, "%H:%M:%S"),
-            "url": self.url
+            "url": self.url,
+            "model": self.model
         }
     
 class Llm_with_rag_log(db.Model):
@@ -60,6 +62,7 @@ class Llm_with_rag_log(db.Model):
     with_rag_answer = db.Column(db.String(255), nullable=False)
     with_rag_duration = db.Column(db.Time, nullable=False)
     url = db.Column(db.String(255), nullable=False)
+    model = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
         return f'<Llm_logs {self.correlation_id}>'
@@ -68,5 +71,6 @@ class Llm_with_rag_log(db.Model):
         return {
             "with_rag_answer": self.with_rag_answer,
             "with_rag_duration": datetime.time.strftime(self.with_rag_duration, "%H:%M:%S"),
-            "url": self.url
+            "url": self.url,
+            "model": self.model
         }

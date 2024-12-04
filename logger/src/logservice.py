@@ -49,6 +49,7 @@ class LogService:
             without_rag_answer=llm_log["without_rag_answer"],
             without_rag_duration=llm_log["without_rag_duration"],
             url=llm_log["url"],
+            model=llm_log["model"]
         )
         return Repository.save_llm_without_rag_log(llm_log)
     
@@ -61,6 +62,7 @@ class LogService:
             with_rag_answer=llm_log["with_rag_answer"],
             with_rag_duration=llm_log["with_rag_duration"],
             url=llm_log["url"],
+            model=llm_log["model"]
         )
         return Repository.save_llm_with_rag_log(llm_log)
     
