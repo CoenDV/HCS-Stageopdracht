@@ -56,6 +56,7 @@ class InsuranceService:
             "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/backend_logs",
             json={
                 "correlation_id": data["correlation_id"],
+                "prompt": data["text"],
                 "retrieved_documents": return_data["retrieved_documents"],
                 "similarity_score": return_data["similarity_score"],
                 "time": time.strftime("%H:%M:%S", time.localtime()),

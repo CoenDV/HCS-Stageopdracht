@@ -21,6 +21,7 @@ class Frontend_log(db.Model):
 class Backend_log(db.Model):
     __tablename__ = 'backend_logs'
     correlation_id = db.Column(db.String(36), primary_key=True)
+    prompt = db.Column(db.String(255), nullable=False)
     retrieved_documents = db.Column(db.Text, nullable=True)
     similarity_score = db.Column(db.Float, nullable=True)
     time = db.Column(db.Time, nullable=False)
@@ -31,6 +32,7 @@ class Backend_log(db.Model):
     
     def to_dict(self):
         return {
+            "prompt": self.prompt,
             "retrieved_documents": self.retrieved_documents,
             "similarity_score": self.similarity_score,
             "time": datetime.time.strftime(self.time, "%H:%M:%S"),

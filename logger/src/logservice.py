@@ -33,6 +33,7 @@ class LogService:
 
         backend_log = Backend_log(
             correlation_id=backend_log["correlation_id"],
+            prompt=backend_log["prompt"],
             retrieved_documents=docs,
             similarity_score=backend_log["similarity_score"],
             time=backend_log["time"],
@@ -71,10 +72,10 @@ class LogService:
         for i in range(len(frontend_logs)):
             logs.append({
                 "correlation_id": frontend_logs[i].correlation_id,
-                "frontend": frontend_logs[i].to_dict(),
-                "backend": backend_logs[i].to_dict(),
-                "llm_with_rag": llm_with_rag_logs[i].to_dict(),
-                "llm_without_rag": llm_without_rag_logs[i].to_dict()
+                "frontend_log": frontend_logs[i].to_dict() if i < len(frontend_logs) else {},
+                "backend_log": backend_logs[i].to_dict() if i < len(backend_logs) else {},
+                "llm_with_rag_log": llm_with_rag_logs[i].to_dict() if i < len(llm_with_rag_logs) else {},
+                "llm_without_rag_log": llm_without_rag_logs[i].to_dict() if i < len(llm_without_rag_logs) else {}
             })
 
         return logs

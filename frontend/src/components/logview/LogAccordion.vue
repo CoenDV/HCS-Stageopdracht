@@ -1,23 +1,6 @@
 <script>
 export default {
     name: "LogAccordion",
-    components: {
-
-    },
-    setup() {
-
-    },
-    data() {
-        return {
-
-        }
-    },
-    methods: {
-
-    },
-    mounted() {
-
-    },
     props: {
         log: {
             type: Object,
@@ -39,7 +22,20 @@ export default {
         <div :id="'panelsStayOpen-' + this.log.correlation_id" class="accordion-collapse collapse">
             <div class="accordion-body row justify-content-center">
                 <!-- Frontend -->
-                <table class="table table-bordered table-striped table-hover w-75">
+                <table v-if="!log.frontend_log.url" class="table table-bordered table-striped table-hover mx-5" style="width: 40%;">
+                    <thead>
+                        <tr>
+                            <th>Frontend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Geen Logs gevonden... </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table v-else class="table table-bordered table-striped table-hover w-75">
                     <thead>
                         <tr>
                             <th scope="col"></th>
@@ -49,11 +45,11 @@ export default {
                     <tbody>
                         <tr>
                             <td>Tijd</td>
-                            <td>{{ log.frontend.time }}</td>
+                            <td>{{ log.frontend_log.time }}</td>
                         </tr>
                         <tr>
-                            <td>Url</td>
-                            <td class="text-primary">{{ log.frontend.url }}</td>
+                            <td>Bron</td>
+                            <td class="text-primary">{{ log.frontend_log.url }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -65,7 +61,20 @@ export default {
                 </svg>
 
                 <!-- Backend -->
-                <table class="table table-bordered table-striped table-hover w-75">
+                <table v-if="!log.backend_log.url" class="table table-bordered table-striped table-hover mx-5" style="width: 40%;">
+                    <thead>
+                        <tr>
+                            <th>Backend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Geen Logs gevonden... </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table v-else class="table table-bordered table-striped table-hover w-75">
                     <thead>
                         <tr>
                             <th scope="col"></th>
@@ -74,20 +83,24 @@ export default {
                     </thead>
                     <tbody>
                         <tr>
+                            <td>Prompt</td>
+                            <td>{{ log.backend_log.prompt }}</td>
+                        </tr>
+                        <tr>
                             <td>Context</td>
-                            <td>{{ log.backend.retrieved_documents }}</td>
+                            <td>{{ log.backend_log.retrieved_documents }}</td>
                         </tr>
                         <tr>
                             <td>Relevantie Score</td>
-                            <td>{{ log.backend.similarity_score }}</td>
+                            <td>{{ log.backend_log.similarity_score }}</td>
                         </tr>
                         <tr>
                             <td>Tijd</td>
-                            <td>{{ log.backend.time }}</td>
+                            <td>{{ log.backend_log.time }}</td>
                         </tr>
                         <tr>
-                            <td>Url</td>
-                            <td class="text-primary">{{ log.backend.url }}</td>
+                            <td>Bron</td>
+                            <td class="text-primary">{{ log.backend_log.url }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -104,7 +117,20 @@ export default {
                 </svg>
 
                 <!-- LLM without RAG -->
-                <table class="table table-bordered table-striped table-hover mx-5" style="width: 40%;">
+                <table v-if="!log.llm_without_rag_log.url" class="table table-bordered table-striped table-hover mx-5" style="width: 40%;">
+                    <thead>
+                        <tr>
+                            <th>LLM zonder RAG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Geen Logs gevonden... </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table v-else class="table table-bordered table-striped table-hover mx-5" style="width: 40%;">
                     <thead>
                         <tr>
                             <th scope="col"></th>
@@ -114,25 +140,38 @@ export default {
                     <tbody>
                         <tr>
                             <td>Antwoord zonder context</td>
-                            <td>{{ log.llm_without_rag.without_rag_answer }}</td>
+                            <td>{{ log.llm_without_rag_log.without_rag_answer }}</td>
                         </tr>
                         <tr>
                             <td>Tijd zonder context</td>
-                            <td>{{ log.llm_without_rag.without_rag_duration }}</td>
+                            <td>{{ log.llm_without_rag_log.without_rag_duration }}</td>
                         </tr>
                         <tr>
                             <td>Model</td>
-                            <td>{{ log.llm_without_rag.model }}</td>
+                            <td>{{ log.llm_without_rag_log.model }}</td>
                         </tr>
                         <tr>
-                            <td>Url</td>
-                            <td class="text-primary">{{ log.llm_without_rag.url }}</td>
+                            <td>Bron</td>
+                            <td class="text-primary">{{ log.llm_without_rag_log.url }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <!-- LLM with RAG -->
-                <table class="table table-bordered table-striped table-hover mx-5" style="width: 40%;">
+                <table v-if="!log.llm_with_rag_log.url" class="table table-bordered table-striped table-hover mx-5" style="width: 40%;">
+                    <thead>
+                        <tr>
+                            <th>LLM met RAG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Geen Logs gevonden... </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table v-else class="table table-bordered table-striped table-hover mx-5" style="width: 40%;">
                     <thead>
                         <tr>
                             <th scope="col"></th>
@@ -142,19 +181,19 @@ export default {
                     <tbody>
                         <tr>
                             <td>Antwoord met context</td>
-                            <td>{{ log.llm_with_rag.with_rag_answer }}</td>
+                            <td>{{ log.llm_with_rag_log.with_rag_answer }}</td>
                         </tr>
                         <tr>
                             <td>Tijd met context</td>
-                            <td>{{ log.llm_with_rag.with_rag_duration }}</td>
+                            <td>{{ log.llm_with_rag_log.with_rag_duration }}</td>
                         </tr>
                         <tr>
                             <td>Model</td>
-                            <td>{{ log.llm_without_rag.model }}</td>
+                            <td>{{ log.llm_with_rag_log.model }}</td>
                         </tr>
                         <tr>
-                            <td>Url</td>
-                            <td class="text-primary">{{ log.llm_with_rag.url }}</td>
+                            <td>Bron</td>
+                            <td class="text-primary">{{ log.llm_with_rag_log.url }}</td>
                         </tr>
                     </tbody>
                 </table>
