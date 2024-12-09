@@ -1,3 +1,5 @@
+CREATE DATABASE logs WITH OWNER HCSuser;
+
 CREATE TABLE frontend_logs (
     correlation_id varchar(36) NOT NULL,
     prompt varchar(255) NOT NULL,

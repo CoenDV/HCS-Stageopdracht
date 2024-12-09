@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logger
+  template:
+    metadata:
+      labels:
+        app: logger
+    spec:
+      containers:
+      - name: logger
+        image: 'quay.io/coen_de_vries/hcs-stage/logger:latest'
+        ports:
+        - containerPort: 5000
+
+---
+
+# Create a Service object for the frontend Deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: logger
+spec:
+  selector:
+    app: logger
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+
+---
+
+# Create a route for the frontend Service
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: logger
+spec:
+  to:
+    kind: Service
+    name: logger
+  port:
+    targetPort: 5000
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

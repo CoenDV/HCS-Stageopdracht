@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hcs-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hcs-frontend
+  template:
+    metadata:
+      labels:
+        app: hcs-frontend
+    spec:
+      containers:
+      - name: hcs-frontend
+        image: 'quay.io/coen_de_vries/hcs-stage/hcs-frontend:latest'
+        ports:
+        - containerPort: 8080
+
+---
+
+# Create a Service object for the frontend Deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: hcs-frontend
+spec:
+  selector:
+    app: hcs-frontend
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+
+---
+
+# Create a route for the frontend Service
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: hcs-frontend
+spec:
+  to:
+    kind: Service
+    name: hcs-frontend
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
