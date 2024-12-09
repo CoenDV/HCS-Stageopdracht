@@ -46,6 +46,10 @@ export default {
                         </thead>
                         <tbody>
                             <tr>
+                                <td>Prompt</td>
+                                <td>{{ log.frontend_log.prompt }}</td>
+                            </tr>
+                            <tr>
                                 <td>Tijd</td>
                                 <td>{{ log.frontend_log.time }}</td>
                             </tr>
@@ -185,10 +189,6 @@ export default {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Prompt</td>
-                                <td>{{ log.backend_log.prompt }}</td>
-                            </tr>
                             <tr>
                                 <td>Context</td>
                                 <td>

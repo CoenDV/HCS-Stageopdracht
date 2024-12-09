@@ -16,6 +16,7 @@ class LogService:
     def save_frontend_log(frontend_log):
         frontend_log = Frontend_log(
             correlation_id=frontend_log["correlation_id"],
+            prompt=frontend_log["prompt"],
             time=frontend_log["time"],
             url=frontend_log["url"],
         )
@@ -33,7 +34,6 @@ class LogService:
 
         backend_log = Backend_log(
             correlation_id=backend_log["correlation_id"],
-            prompt=backend_log["prompt"],
             retrieved_documents=docs,
             similarity_score=backend_log["similarity_score"],
             time=backend_log["time"],

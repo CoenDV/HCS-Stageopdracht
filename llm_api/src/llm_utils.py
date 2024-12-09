@@ -16,12 +16,12 @@ class HCSInsuranceAssistant:
 
         # System prompts
         self.system_prompt = SystemMessagePromptTemplate.from_template(
-            "Je bent een assistent voor HCS-Company autoverzekeringen. Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI:. Geef directe antwoorden op basis van de context en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
+            "Je bent een assistent voor HCS-Company autoverzekeringen. Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI: of Human: of Antwoord:. Geef directe antwoorden op basis van de context en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
             "Context: {context}"
         )
 
         self.system_prompt_without_RAG = SystemMessagePromptTemplate.from_template(
-            "Je bent een assistent voor HCS-Company autoverzekeringen. Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI:. Geef directe antwoorden en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
+            "Je bent een assistent voor HCS-Company autoverzekeringen. Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI: of Human: of Antwoord:. Geef directe antwoorden en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
         )
 
         # Human prompt

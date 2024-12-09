@@ -41,6 +41,7 @@ export default {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     correlation_id: correlation_id,
+                    prompt: this.temporary_question,
                     time: new Date().toLocaleTimeString(),
                     url: window.location.href
                 })

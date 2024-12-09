@@ -95,3 +95,16 @@ spec:
       protocol: TCP
       port: 5432
       targetPort: 5432
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres
+  namespace: coen-de-vries-dev
+type: Opaque
+stringData:
+  POSTGRESQL_USER: HCSuser
+  POSTGRESQL_PASSWORD: HCSpassword
+  POSTGRESQL_DATABASE: HCSinsurance
