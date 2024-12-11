@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgresql
+  name: hcsinsurance-postgresql
 spec:
   strategy:
     type: Recreate
@@ -12,11 +12,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgresql
+      app: hcsinsurance-postgresql
   template:
     metadata:
       labels:
-        app: postgresql
+        app: hcsinsurance-postgresql
     spec:
       volumes:
         - name: pgvector-pvc
@@ -36,7 +36,7 @@ spec:
             successThreshold: 1
             failureThreshold: 3
           terminationMessagePath: /dev/termination-log
-          name: postgresql
+          name: hcsinsurance-postgresql
           livenessProbe:
             exec:
               command:
@@ -72,9 +72,9 @@ spec:
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: pgvector-pvc
-              mountPath: /var/lib/pgsql/data
+              mountPath: /var/lib/postgresql/data
           terminationMessagePolicy: File
-          image: 'quay.io/rh-aiservices-bu/postgresql-15-pgvector-c9s:latest'
+          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:latest'
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
@@ -86,12 +86,12 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: postgresql
+  name: hcsinsurance-postgresql
 spec:
   selector:
-    app: postgresql
+    app: hcsinsurance-postgresql
   ports:
-    - name: postgresql
+    - name: hcsinsurance-postgresql
       protocol: TCP
       port: 5432
       targetPort: 5432
@@ -122,46 +122,3 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: gp3
-
----
-
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: postgres-init
-spec:
-  template:
-    spec:
-      containers:
-      - name: psql
-        image: 'quay.io/rh-aiservices-bu/postgresql-15-pgvector-c9s:latest'
-        command: ["/bin/sh","-c"]
-        args: ["
-          PGPASSWORD=HCSpassword psql -h postgresql -U postgres -f /scripts/activate-extension.sql; 
-          PGPASSWORD=HCSpassword psql -h postgresql -d HCSinsurance -U HCSuser -f /scripts/HCSinsurance.sql; 
-          PGPASSWORD=HCSpassword psql -h postgresql -d HCSinsurance -U HCSuser -f /scripts/logs.sql;
-        "]
-        volumeMounts:
-        - name: sql-scripts
-          mountPath: /scripts
-      restartPolicy: OnFailure
-      volumes:
-      - name: sql-scripts
-        configMap:
-          name: init-scripts
-
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: init-scripts
-data:
-  activate-extension.sql: |
-    CREATE EXTENSION IF NOT EXISTS vector;
-
-    CREATE DATABASE logs WITH OWNER HCSuser;
-  HCSinsurance.sql: |
-    
-  logs.sql : |
-    CREATE DATABASE logs;

@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS HCSinsurance;
 \connect HCSinsurance;
 
+\echo 'Creating tables for HCSinsurance database'
 CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE customer (

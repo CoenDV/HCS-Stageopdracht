@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS logs;
 \connect logs;
 
+\echo 'Creating tables for logs database'
 CREATE TABLE frontend_logs (
     correlation_id varchar(36) NOT NULL,
     prompt varchar(255) NOT NULL,

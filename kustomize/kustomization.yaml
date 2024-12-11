@@ -1,11 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
 resources:
 - frontend_deployment.yaml
 - backend_deployment.yaml
 - logger_deployment.yaml
-- postgres_deployment.yaml
-
-configMapGenerator:
-- name: app-config
-  literals:
-  - ENV=demo
-  - DEBUG=false
+- demo_postgres_deployment.yaml
+- logs_postgres_deployment.yaml

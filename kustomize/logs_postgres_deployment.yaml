@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logs-postgresql
+spec:
+  strategy:
+    type: Recreate
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    activeDeadlineSeconds: 21600
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logs-postgresql
+  template:
+    metadata:
+      labels:
+        app: logs-postgresql
+    spec:
+      volumes:
+        - name: pgvector-pvc
+          persistentVolumeClaim:
+            claimName: pgvector-pvc
+      containers:
+        - resources:
+            limits:
+              memory: 512Mi
+          readinessProbe:
+            exec:
+              command:
+                - /usr/libexec/check-container
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          name: logs-postgresql
+          livenessProbe:
+            exec:
+              command:
+                - /usr/libexec/check-container
+                - '--live'
+            initialDelaySeconds: 120
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: POSTGRESQL_USER
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: POSTGRESQL_PASSWORD
+            - name: POSTGRESQL_DATABASE
+              value: logs
+          securityContext:
+            capabilities: {}
+            privileged: false
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: pgvector-pvc
+              mountPath: /var/lib/postgresql/data
+          terminationMessagePolicy: File
+          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:latest'
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: logs-postgresql
+spec:
+  selector:
+    app: logs-postgresql
+  ports:
+    - name: logs-postgresql
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
