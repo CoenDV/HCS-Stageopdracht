@@ -19,9 +19,9 @@ spec:
         app: hcsinsurance-postgresql
     spec:
       volumes:
-        - name: pgvector-pvc
+        - name: hcsinsurance-postgresql-pvc
           persistentVolumeClaim:
-            claimName: pgvector-pvc
+            claimName: hcsinsurance-postgresql-pvc
       containers:
         - resources:
             limits:
@@ -71,10 +71,10 @@ spec:
               protocol: TCP
           imagePullPolicy: IfNotPresent
           volumeMounts:
-            - name: pgvector-pvc
-              mountPath: /var/lib/postgresql/data
+            - name: hcsinsurance-postgresql-pvc
+              mountPath: /var/lib/pgsql/data
           terminationMessagePolicy: File
-          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:latest'
+          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:v16'
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
@@ -114,7 +114,7 @@ stringData:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pgvector-pvc
+  name: hcsinsurance-postgresql-pvc
 spec:
   accessModes:
     - ReadWriteOnce

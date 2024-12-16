@@ -1,8 +1,6 @@
-CREATE DATABASE IF NOT EXISTS HCSinsurance;
-\connect HCSinsurance;
+\c HCSinsurance;
 
-\echo 'Creating tables for HCSinsurance database'
-CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION vector;
 
 CREATE TABLE customer (
     id SERIAL PRIMARY KEY,
@@ -38,3 +36,8 @@ CREATE TABLE customer_policy (
     FOREIGN KEY (car_licenseplate) REFERENCES car (licenseplate) ON DELETE CASCADE,
     FOREIGN KEY (insurance_policy_id) REFERENCES insurance_policy (id) ON DELETE CASCADE
 );
+
+ALTER TABLE customer OWNER TO HCSuser;
+ALTER TABLE car OWNER TO HCSuser;
+ALTER TABLE insurance_policy OWNER TO HCSuser;
+ALTER TABLE customer_policy OWNER TO HCSuser;

@@ -1,10 +1,6 @@
 # Use the provided PostgreSQL image with pgvector
 FROM quay.io/rh-aiservices-bu/postgresql-15-pgvector-c9s:latest
 
-# Switch to root to modify permissions
-USER postgres
-COPY activate_pgvector.sh /docker-entrypoint-initdb.d/activate_pgvector.sh
-
 #Mount sql scripts to the container
-COPY sql-scripts/HCSinsurance.sql /docker-entrypoint-initdb.d/HCSinsurance.sql
-COPY sql-scripts/logs.sql /docker-entrypoint-initdb.d/logs.sql
+COPY sql-scripts/HCSinsurance.sql /docker-entrypoint-initdb.d/
+COPY sql-scripts/logs.sql /docker-entrypoint-initdb.d/

@@ -19,9 +19,9 @@ spec:
         app: logs-postgresql
     spec:
       volumes:
-        - name: pgvector-pvc
+        - name: logs-postgresql-pvc
           persistentVolumeClaim:
-            claimName: pgvector-pvc
+            claimName: logs-postgresql-pvc
       containers:
         - resources:
             limits:
@@ -68,10 +68,10 @@ spec:
               protocol: TCP
           imagePullPolicy: IfNotPresent
           volumeMounts:
-            - name: pgvector-pvc
-              mountPath: /var/lib/postgresql/data
+            - name: logs-postgresql-pvc
+              mountPath: /var/lib/pgsql/data
           terminationMessagePolicy: File
-          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:latest'
+          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:v16'
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
@@ -92,3 +92,17 @@ spec:
       protocol: TCP
       port: 5432
       targetPort: 5432
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: logs-postgresql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: gp3

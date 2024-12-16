@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS logs;
-\connect logs;
+CREATE DATABASE logs;
+\c logs;
 
 CREATE TABLE frontend_logs (
     correlation_id varchar(36) NOT NULL,
@@ -31,3 +31,8 @@ CREATE TABLE llm_with_RAG_logs (
     model varchar(255) NOT NULL,
     url varchar(255) NOT NULL
 );
+
+ALTER TABLE frontend_logs OWNER TO HCSuser;
+ALTER TABLE backend_logs OWNER TO HCSuser;
+ALTER TABLE llm_without_RAG_logs OWNER TO HCSuser;
+ALTER TABLE llm_with_RAG_logs OWNER TO HCSuser;
