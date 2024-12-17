@@ -74,7 +74,7 @@ spec:
             - name: hcsinsurance-postgresql-pvc
               mountPath: /var/lib/pgsql/data
           terminationMessagePolicy: File
-          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:v16'
+          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:v18'
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
@@ -105,7 +105,7 @@ metadata:
   namespace: coen-de-vries-dev
 type: Opaque
 stringData:
-  POSTGRESQL_USER: HCSuser
+  POSTGRESQL_USER: hcsuser
   POSTGRESQL_PASSWORD: HCSpassword
   POSTGRESQL_DATABASE: HCSinsurance
 

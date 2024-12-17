@@ -105,6 +105,6 @@ metadata:
   namespace: coen-de-vries-dev
 type: Opaque
 stringData:
-  POSTGRESQL_USER: HCSuser
+  POSTGRESQL_USER: hcsuser
   POSTGRESQL_PASSWORD: HCSpassword
   POSTGRESQL_DATABASE: HCSinsurance

@@ -32,7 +32,7 @@ CREATE TABLE llm_with_RAG_logs (
     url varchar(255) NOT NULL
 );
 
-ALTER TABLE frontend_logs OWNER TO HCSuser;
-ALTER TABLE backend_logs OWNER TO HCSuser;
-ALTER TABLE llm_without_RAG_logs OWNER TO HCSuser;
-ALTER TABLE llm_with_RAG_logs OWNER TO HCSuser;
+ALTER TABLE frontend_logs OWNER TO hcsuser;
+ALTER TABLE backend_logs OWNER TO hcsuser;
+ALTER TABLE llm_without_RAG_logs OWNER TO hcsuser;
+ALTER TABLE llm_with_RAG_logs OWNER TO hcsuser;

@@ -32,6 +32,9 @@ class InsuranceService:
             content = data['content'],
             embedding = cls.transformer.encode(data['content']).tolist()
         )
+
+        print(insurance_policy.embedding)
+
         return InsuranceRepository.save(insurance_policy)
     
     def get_insurance_policy_by_id(id):

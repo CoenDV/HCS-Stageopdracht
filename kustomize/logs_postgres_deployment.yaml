@@ -71,7 +71,7 @@ spec:
             - name: logs-postgresql-pvc
               mountPath: /var/lib/pgsql/data
           terminationMessagePolicy: File
-          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:v16'
+          image: 'quay.io/coen_de_vries/hcs-stage/pgvector:v18'
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
