@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hcs-frontend
+  name: llm-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hcs-frontend
+      app: llm-app
   template:
     metadata:
       labels:
-        app: hcs-frontend
+        app: llm-app
     spec:
       containers:
-      - name: hcs-frontend
-        image: 'quay.io/coen_de_vries/hcs-stage/frontend:v2'
+      - name: llm-app
+        image: 'quay.io/coen_de_vries/hcs-stage/llm-app:v2'
         ports:
         - containerPort: 8080
 
@@ -24,10 +24,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hcs-frontend
+  name: llm-app
 spec:
   selector:
-    app: hcs-frontend
+    app: llm-app
   ports:
   - protocol: TCP
     port: 8080
@@ -39,11 +39,11 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: hcs-frontend
+  name: llm-app
 spec:
   to:
     kind: Service
-    name: hcs-frontend
+    name: llm-app
   port:
     targetPort: 8080
   tls:

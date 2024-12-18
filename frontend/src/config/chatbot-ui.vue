@@ -32,11 +32,11 @@ export default {
             this.logRequest(correlation_id);
 
 
-            this.getChatbotResponse('https://saved-ferret-rapid.ngrok-free.app/generate-without-RAG/', correlation_id);
-            this.getChatbotResponse('https://saved-ferret-rapid.ngrok-free.app/generate-with-RAG/', correlation_id);
+            this.getChatbotResponse('https://llm-app-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/generate-without-RAG/', correlation_id);
+            this.getChatbotResponse('https://llm-app-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/generate-with-RAG/', correlation_id);
         },
         async logRequest(correlation_id) {
-            await fetch('https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/frontend_logs', {
+            await fetch('https://logger-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/frontend_logs', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -73,7 +73,7 @@ export default {
                 if (done) break;
 
                 const chunk = decoder.decode(value, { stream: true });
-                if (url === 'https://saved-ferret-rapid.ngrok-free.app/generate-without-RAG/')
+                if (url === 'https://llm-app-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/generate-without-RAG/')
                     this.temporary_without_RAG_answer += chunk;
                 else
                     this.temporary_RAG_answer += chunk;

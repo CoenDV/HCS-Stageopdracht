@@ -16,12 +16,16 @@ class HCSInsuranceAssistant:
 
         # System prompts
         self.system_prompt = SystemMessagePromptTemplate.from_template(
-            "Je bent een assistent voor HCS-Company autoverzekeringen. Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI: of Human: of Antwoord:. Geef directe antwoorden op basis van de context en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
+            "Je bent een assistent voor HCS-Company autoverzekeringen. "
+            "Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI: of Human: of Antwoord:. "
+            "Geef directe antwoorden op basis van de context en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
             "Context: {context}"
         )
 
         self.system_prompt_without_RAG = SystemMessagePromptTemplate.from_template(
-            "Je bent een assistent voor HCS-Company autoverzekeringen. Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI: of Human: of Antwoord:. Geef directe antwoorden en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
+            "Je bent een assistent voor HCS-Company autoverzekeringen. "
+            "Beantwoord klantvragen over autoverzekeringen zonder extra labels zoals System: of AI: of Human: of Antwoord:. "
+            "Geef directe antwoorden en vraag om verduidelijking als dat nodig is. Antwoorden moeten altijd in het Nederlands zijn."
         )
 
         # Human prompt
@@ -78,7 +82,7 @@ class HCSInsuranceAssistant:
         timedelta = datetime.now() - startTime
         print("Duration: ", timedelta)
         requests.post(
-            "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/llm_with_rag_logs",
+            "https://logger-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/llm_with_rag_logs",
             json={
                 "correlation_id": request.correlation_id,
                 "with_rag_answer": answer,
@@ -102,7 +106,7 @@ class HCSInsuranceAssistant:
         timedelta = datetime.now() - startTime
         print("Duration: ", timedelta)
         requests.post(
-            "https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/llm_without_rag_logs",
+            "https://logger-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/llm_without_rag_logs",
             json={
                 "correlation_id": request.correlation_id,
                 "without_rag_answer": answer,
@@ -115,7 +119,7 @@ class HCSInsuranceAssistant:
 
     def get_relevant_documents(self, request: object):
         retrieved_docs = requests.post(
-            "https://hcs-backend-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/insurance_policies/similar",
+            "https://hcs-backend-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/insurance_policies/similar",
             json={
                 "text": request.prompt,
                 "correlation_id": request.correlation_id

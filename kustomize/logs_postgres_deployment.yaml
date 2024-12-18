@@ -105,4 +105,4 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: gp3
+  storageClassName: lvms-vg1

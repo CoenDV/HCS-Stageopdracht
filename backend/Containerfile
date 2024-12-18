@@ -21,11 +21,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Create the .cache directory and give user full access with group permissions
 RUN mkdir -p /app/.cache && \
-    chown -R 1001490000:1001490000 /app/.cache && \
+    chown -R 1001230000:1001230000 /app/.cache && \
     chmod -R 770 /app/.cache
 
-# Switch to user 1001490000
-USER 1001490000
+# Switch to user 1001230000
+USER 1001230000
 
 # Copy the application code into the container
 COPY . .

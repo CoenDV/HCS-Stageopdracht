@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: hcs-backend
-        image: 'quay.io/coen_de_vries/hcs-stage/hcs-backend:latest'
+        image: 'quay.io/coen_de_vries/hcs-stage/backend:v2'
         ports:
         - containerPort: 5000
 

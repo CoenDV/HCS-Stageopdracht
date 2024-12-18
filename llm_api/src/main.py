@@ -14,8 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# assistant = HCSInsuranceAssistant("model/granite-7b-instruct-Q4_K_M.gguf") # https://huggingface.co/tensorblock/granite-7b-instruct-GGUF
-assistant = HCSInsuranceAssistant("model/granite-3.0-8b-instruct-Q4_K_M.gguf")
+assistant = HCSInsuranceAssistant("./../model/granite-3.0-8b-lab-community-Q4_K_M.gguf") # https://huggingface.co/bartowski/granite-3.0-8b-lab-community-GGUF
 
 class PromptRequest(BaseModel):
     prompt: str

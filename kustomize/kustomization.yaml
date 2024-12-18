@@ -7,3 +7,4 @@ resources:
 - logger_deployment.yaml
 - demo_postgres_deployment.yaml
 - logs_postgres_deployment.yaml
+- llm_app_deployment.yaml

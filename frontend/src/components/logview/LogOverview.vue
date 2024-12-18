@@ -19,7 +19,7 @@ export default {
     },
     methods: {
         getDocuments() {
-            axios.get('https://logger-coen-de-vries-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com/logs')
+            axios.get('https://logger-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/logs')
                 .then(response => {
                     this.logs = response.data;
                     console.log(this.logs);

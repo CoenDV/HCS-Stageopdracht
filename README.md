@@ -35,4 +35,4 @@ Bij gebruik van dit project is gebruik gemaakt van Red Hat Openshift developer s
 **Als de database niet automatisch initialiseert, voer de volgende stappen uit.**
 4. Zoek de naam van de postgresql pods: `oc get pods`
 5. Voer het SQL script uit: `oc exec -it <HCSinsurance-postgresql pod naam> -- psql -d HCSinsurance -f /docker-entrypoint-initdb.d/HCSinsurance.sql`
-6. Voer het SQL script uit: `oc exec -it <logs-postgresql pod naam> -- psql -d logs-f /docker-entrypoint-initdb.d/logs.sql`
+6. Voer het SQL script uit: `oc exec -it <logs-postgresql pod naam> -- psql -d logs -f /docker-entrypoint-initdb.d/logs.sql`
