@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hcs-frontend
+  annotations:
+    haproxy.router.openshift.io/timeout: "10m"
 spec:
   replicas: 1
   selector:
@@ -14,7 +16,7 @@ spec:
     spec:
       containers:
       - name: hcs-frontend
-        image: 'quay.io/coen_de_vries/hcs-stage/frontend:v2'
+        image: 'quay.io/coen_de_vries/hcs-stage/frontend:v6'
         ports:
         - containerPort: 8080
 
@@ -41,6 +43,7 @@ kind: Route
 metadata:
   name: hcs-frontend
 spec:
+  timeout: 2m
   to:
     kind: Service
     name: hcs-frontend

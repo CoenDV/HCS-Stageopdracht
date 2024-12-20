@@ -18,90 +18,120 @@ export default {
 
             RagResponse: '',
             WithoutRagResponse: '',
-        }
+        };
     },
     methods: {
-        askQuestion() {
-            this.temporary_question = document.getElementById('question').value;
-            document.getElementById('question').value = '';
+        async askQuestion() {
+            try {
+                // Retrieve and clear the question input
+                this.temporary_question = document.getElementById('question').value;
+                document.getElementById('question').value = '';
 
-            this.RagResponse = '';
-            this.WithoutRagResponse = '';
+                // Reset responses
+                this.RagResponse = '';
+                this.WithoutRagResponse = '';
 
-            const correlation_id = uuid.v4();
-            this.logRequest(correlation_id);
+                // Generate a correlation ID
+                const correlation_id = uuid.v4();
 
+                // Log the request
+                await this.logRequest(correlation_id);
 
-            this.getChatbotResponse('https://llm-app-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/generate-without-RAG/', correlation_id);
-            this.getChatbotResponse('https://llm-app-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/generate-with-RAG/', correlation_id);
+                // Define API URLs
+                const urlWithoutRAG = 'https://llm-app-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/generate-without-RAG/';
+                const urlWithRAG = 'https://llm-app-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/generate-with-RAG/';
+
+                // Call without RAG (first)
+                await this.getChatbotResponse(urlWithoutRAG, correlation_id);
+
+                // Call with RAG (second)
+                await this.getChatbotResponse(urlWithRAG, correlation_id);
+
+                // Save messages after both responses are complete
+                this.saveMessages();
+
+            } catch (error) {
+                console.error("Error in askQuestion:", error);
+            }
         },
         async logRequest(correlation_id) {
-            await fetch('https://logger-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/frontend_logs', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    correlation_id: correlation_id,
-                    prompt: this.temporary_question,
-                    time: new Date().toLocaleTimeString(),
-                    url: window.location.href
-                })
-            })
+            try {
+                await fetch('https://logger-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/frontend_logs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        correlation_id,
+                        prompt: this.temporary_question,
+                        time: new Date().toLocaleTimeString(),
+                        url: window.location.href
+                    }),
+                });
+            } catch (error) {
+                console.error("Error logging request:", error);
+            }
         },
         async getChatbotResponse(url, correlation_id) {
             try {
-                this.temporary_RAG_question = this.temporary_question;
-                this.temporary_without_RAG_question = this.temporary_question;
+                // Initialize temporary fields
+                if (url.includes('without-RAG')) {
+                    this.temporary_without_RAG_question = this.temporary_question;
+                } else {
+                    this.temporary_RAG_question = this.temporary_question;
+                }
 
+                // Make the API call
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
+                    body: JSON.stringify({
                         prompt: this.temporary_question,
-                        correlation_id: correlation_id
-                    })
-                })
+                        correlation_id
+                    }),
+                });
 
-                this.retrieveChunks(response.body.getReader(), new TextDecoder(), url);
+                // Wait for chunks to complete
+                await this.retrieveChunks(response.body.getReader(), new TextDecoder(), url);
 
             } catch (error) {
-                console.error("Streaming error: ", error);
+                console.error("Error in getChatbotResponse:", error);
             }
         },
         async retrieveChunks(reader, decoder, url) {
-            while (true) {
+            let isDone = false;
+
+            // Ensure the reader processes chunks one at a time
+            while (!isDone) {
                 const { done, value } = await reader.read();
-                if (done) break;
+                isDone = done; // Update completion status
 
-                const chunk = decoder.decode(value, { stream: true });
-                if (url === 'https://llm-app-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/generate-without-RAG/')
-                    this.temporary_without_RAG_answer += chunk;
-                else
-                    this.temporary_RAG_answer += chunk;
-            }
-
-            // Wait for the stream to finish before saving the messages
-            if (this.temporary_RAG_answer !== '' && this.temporary_without_RAG_answer !== '') {
-                this.saveMessages();
+                if (value) {
+                    const chunk = decoder.decode(value, { stream: true });
+                    if (url.includes('without-RAG')) {
+                        this.temporary_without_RAG_answer += chunk;
+                    } else {
+                        this.temporary_RAG_answer += chunk;
+                    }
+                }
             }
         },
         saveMessages() {
-            // save messages without RAG
+            // Save messages without RAG
             this.messageHistoryWithoutRAG.push({
                 question: this.temporary_question,
-                answer: this.temporary_without_RAG_answer
+                answer: this.temporary_without_RAG_answer,
             });
             this.temporary_without_RAG_question = '';
             this.temporary_without_RAG_answer = '';
 
-            // save messages with RAG
+            // Save messages with RAG
             this.messageHistoryRAG.push({
                 question: this.temporary_question,
-                answer: this.temporary_RAG_answer
+                answer: this.temporary_RAG_answer,
             });
             this.temporary_RAG_question = '';
             this.temporary_RAG_answer = '';
-        }
-    }
+        },
+    },
 };
 </script>
 

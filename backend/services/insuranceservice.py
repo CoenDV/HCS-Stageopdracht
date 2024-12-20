@@ -56,7 +56,7 @@ class InsuranceService:
         return_data = InsuranceRepository.get_similar_policies(text_embedding)
 
         requests.post(
-            "https://logger:5000/backend_logs",
+            "https://logger-coen-de-vries-dev.apps.lab-01.hcs-lab.nl/backend_logs",
             json={
                 "correlation_id": data["correlation_id"],
                 "prompt": data["text"],

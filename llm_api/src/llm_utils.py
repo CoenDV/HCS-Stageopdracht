@@ -12,7 +12,7 @@ class HCSInsuranceAssistant:
     def __init__(self, model_path: str):
         self.lock = asyncio.Lock()
 
-        self.modelName = model_path.split("/")[1]
+        self.modelName = model_path.split("/")[3]
 
         # System prompts
         self.system_prompt = SystemMessagePromptTemplate.from_template(

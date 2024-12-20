@@ -40,6 +40,8 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: logger
+  annotations:
+    haproxy.router.openshift.io/timeout: "10m"
 spec:
   to:
     kind: Service

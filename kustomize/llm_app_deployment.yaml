@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: llm-app
-        image: 'quay.io/coen_de_vries/hcs-stage/llm-app:v2'
+        image: 'quay.io/coen_de_vries/hcs-stage/llm-app:v6'
         ports:
         - containerPort: 8080
 
@@ -40,7 +40,10 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: llm-app
+  annotations:
+    haproxy.router.openshift.io/timeout: "10m"
 spec:
+  timeout: 2m
   to:
     kind: Service
     name: llm-app
